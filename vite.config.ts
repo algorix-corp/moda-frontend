@@ -11,6 +11,7 @@ export default defineConfig({
       devOptions: {
         enabled: true
       },
+      /*
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: '모다',
@@ -30,6 +31,7 @@ export default defineConfig({
           }
         ]
       }
+    */
     })
   ],
 })
