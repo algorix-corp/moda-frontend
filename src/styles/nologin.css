@@ -1,0 +1,24 @@
+.container-nologin {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-button {
+    border-radius: 10px;
+    width: 313px;
+    height: 50px;
+    border: 1px solid var(--Gray-900, #2B323D);
+    background: var(--Black, #0E1114);
+    color: white;
+}
+
+.signup-button {
+    margin-top: 10px;
+    width: 313px;
+    height: 50px;
+    border-radius: 10px;
+    background: var(--White, #FFF);
+}
