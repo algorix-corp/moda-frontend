@@ -1,4 +1,4 @@
-import '../assets/18-search.svg';
+import Image from '../assets/18-search.svg';
 
 export default function Landing() {
   return (
@@ -14,7 +14,7 @@ export default function Landing() {
           boxShadow: '0px 4px 10px 0px rgba(0, 0, 0, 0.05)',
         }}
       >
-        <img src=""></img>
+        <img src={Image} alt="검색 버튼"/>
         <p
           style={{
             color: 'var(--gray400)',
