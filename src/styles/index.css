@@ -3,6 +3,12 @@
 * {
   margin: 0;
   padding: 0;
+
+  letter-spacing: -0.1px;
+
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 :root {
@@ -26,4 +32,12 @@
   --gray200: #dde5f0;
   --gray100: #edf2fa;
   --white: #fff;
+}
+
+body {
+  overflow: hidden;
+  margin: 0;
+  touch-action: none;
+  -ms-touch-action: none;
+  height: 100vh;
 }
