@@ -8,6 +8,7 @@ import SearchBar from './components/SearchBar.tsx';
 import Navigator from './components/Navigator';
 import ErrorCatch from './components/ErrorBoundary';
 import { ErrorBoundary } from 'react-error-boundary';
+import Preview from './pages/Preview.tsx';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,16 @@ const router = createBrowserRouter([
       <div>
         <SearchBar />
         <Search />
+        <Navigator />
+      </div>
+    ),
+  },
+  {
+    path: '/preview',
+    element: (
+      <div>
+        <SearchBar />
+        <Preview />
         <Navigator />
       </div>
     ),

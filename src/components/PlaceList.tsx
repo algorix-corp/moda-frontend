@@ -17,6 +17,12 @@ import {
   selectedAtom,
 } from '../states/atom';
 
+function blurObject(className: string) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  document.querySelector(`.${className}`)!.blur();
+}
+
 export default function PlaceList() {
   const [selected] = useRecoilState(selectedAtom);
   const [, setDeparture] = useRecoilState(departureAtom);
@@ -50,8 +56,10 @@ export default function PlaceList() {
         onTouchEnd={() => {
           if (selected === 1) {
             setDeparture(Location.CURRENT);
+            blurObject('departure');
           } else if (selected === 2) {
             setDestination(Location.CURRENT);
+            blurObject('destination');
           }
         }}
       >
@@ -73,8 +81,10 @@ export default function PlaceList() {
             onTouchEnd={() => {
               if (selected === 1) {
                 setDeparture(place.id);
+                blurObject('departure');
               } else if (selected === 2) {
                 setDestination(place.id);
+                blurObject('destination');
               }
             }}
           >
@@ -111,9 +121,11 @@ export default function PlaceList() {
             }}
             onTouchEnd={() => {
               if (selected === 1) {
-                //
+                setDeparture(place.id);
+                blurObject('departure');
               } else if (selected === 2) {
                 setDestination(place.id);
+                blurObject('destination');
               }
 
               return true;
@@ -157,7 +169,6 @@ const Container = styled.div`
   width: 100vw;
   height: calc(100vh - 100px - 10px - 94px);
 
-  overflow-y: scroll;
   overflow-x: hidden;
 `;
 

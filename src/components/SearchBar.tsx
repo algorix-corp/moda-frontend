@@ -33,18 +33,27 @@ export default function SearchBar() {
       // @ts-ignore
       document.querySelector('.destination')!.value = null;
       setSelected(0);
-    } else if (path === '/search' && departure === undefined) {
-      setDeparture(Location.CURRENT);
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      document.querySelector('.departure')!.value = '내 현재 위치';
+    } else if (
+      path === '/search' &&
+      departure !== undefined &&
+      destination !== undefined
+    ) {
+      navigate('/preview');
+      setPath('/preview');
     }
-  }, [departure, path, setDeparture, setDestination, setSelected]);
+  }, [
+    departure,
+    destination,
+    navigate,
+    path,
+    setDeparture,
+    setDestination,
+    setPath,
+    setSelected,
+  ]);
 
   useEffect(() => {
-    setSelected(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log('DEPARTURE: ' + departure + '\nDESTINATION: ' + destination);
   }, [departure, destination]);
 
   return (
@@ -71,10 +80,17 @@ export default function SearchBar() {
               })
             }
             onFocus={() => {
-              if (path === '/') {
-                navigate('/search');
-                setPath('/search');
-              }
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              document.querySelector('.departure')!.value = '';
+              setQueries({
+                ...queries,
+                destination: '',
+              });
+              setDeparture(undefined);
+
+              navigate('/search');
+              setPath('/search');
 
               setSelected(1);
             }}
@@ -82,14 +98,18 @@ export default function SearchBar() {
               if (path !== '/') {
                 if (departure === undefined) {
                   setDeparture(Location.CURRENT);
-                }
 
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                document.querySelector('.departure')!.value =
-                  departure === Location.CURRENT
-                    ? '내 현재 위치'
-                    : places.find((place) => place.id === departure)?.name;
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  document.querySelector('.departure')!.value = '내 현재 위치';
+                } else {
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  document.querySelector('.departure')!.value =
+                    departure === Location.CURRENT
+                      ? '내 현재 위치'
+                      : places.find((place) => place.id === departure)?.name;
+                }
 
                 setQueries({
                   ...queries,
@@ -116,7 +136,23 @@ export default function SearchBar() {
                 destination: e.target.value,
               })
             }
-            onFocus={() => setSelected(2)}
+            onFocus={() => {
+              if (path === '/preview') {
+                setQueries({
+                  ...queries,
+                  destination: '',
+                });
+                setDestination(undefined);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                document.querySelector('.destination')!.value === '';
+
+                navigate('/search');
+                setPath('/search');
+              }
+
+              setSelected(2);
+            }}
             onBlur={() => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
