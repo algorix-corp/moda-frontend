@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import SearchBar from '../components/SearchBar';
-import Navigator from '../components/Navigator';
 import { useSwipeable } from 'react-swipeable';
 import { useState } from 'react';
 import { schedules } from '../dummy';
@@ -24,7 +22,6 @@ export default function Landing() {
 
   return (
     <Container>
-      <SearchBar />
       <TextGroup>
         <Text>
           미기님의{'\n'}
@@ -47,7 +44,7 @@ export default function Landing() {
               <ScheduleTextGroup>
                 <Title swiped={lastObj === index && isSwiped}>{item.id}</Title>
                 <Place swiped={lastObj === index && isSwiped}>
-                  {item.place}
+                  {item.address}
                 </Place>
               </ScheduleTextGroup>
               <Time swiped={lastObj === index && isSwiped}>{item.time}</Time>
@@ -58,7 +55,6 @@ export default function Landing() {
           ))
         )}
       </ScheduleGroup>
-      <Navigator />
     </Container>
   );
 }
@@ -92,9 +88,11 @@ const ScheduleGroup = styled.div`
   width: calc(100vw - 40px);
   height: 375px;
 
-  border-radius: 15px;
+  border-radius: 25px;
   border: 1px solid var(--gray200);
   background: var(--white);
+
+  overflow: hidden;
 `;
 
 const Schedule = styled.div`
