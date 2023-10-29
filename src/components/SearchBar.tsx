@@ -6,26 +6,46 @@ import {
   destinationAtom,
   departureAtom,
   pathAtom,
+  queriesAtom,
+  selectedAtom,
 } from '../states/atom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { places } from '../dummy';
 
 export default function SearchBar() {
+  const [queries, setQueries] = useRecoilState(queriesAtom);
   const [departure, setDeparture] = useRecoilState(departureAtom);
   const [destination, setDestination] = useRecoilState(destinationAtom);
   const [path, setPath] = useRecoilState(pathAtom);
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useRecoilState(selectedAtom);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (path === '/') {
       setDeparture(undefined);
+      setDestination(undefined);
+
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       document.querySelector('.departure')!.value = null;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      document.querySelector('.destination')!.value = null;
       setSelected(0);
+    } else if (path === '/search' && departure === undefined) {
+      setDeparture(Location.CURRENT);
+
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      document.querySelector('.departure')!.value = '내 현재 위치';
     }
-  }, [path, setDeparture]);
+  }, [departure, path, setDeparture, setDestination, setSelected]);
+
+  useEffect(() => {
+    setSelected(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [departure, destination]);
 
   return (
     <div>
@@ -44,7 +64,12 @@ export default function SearchBar() {
             className="departure"
             isMain={path === '/'}
             selected={selected === 1}
-            onChange={(e) => setDeparture(e.target.value)}
+            onChange={(e) =>
+              setQueries({
+                ...queries,
+                departure: e.target.value,
+              })
+            }
             onFocus={() => {
               if (path === '/') {
                 navigate('/search');
@@ -54,16 +79,22 @@ export default function SearchBar() {
               setSelected(1);
             }}
             onBlur={() => {
-              if (
-                departure !== Location.CURRENT &&
-                (departure === undefined ||
-                  departure.replaceAll(' ', '') === '') &&
-                path !== '/'
-              ) {
-                setDeparture(Location.CURRENT);
+              if (path !== '/') {
+                if (departure === undefined) {
+                  setDeparture(Location.CURRENT);
+                }
+
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                document.querySelector('.departure')!.value = '내 현재 위치';
+                document.querySelector('.departure')!.value =
+                  departure === Location.CURRENT
+                    ? '내 현재 위치'
+                    : places.find((place) => place.id === departure)?.name;
+
+                setQueries({
+                  ...queries,
+                  destination: '',
+                });
               }
             }}
           ></Input>
@@ -76,10 +107,31 @@ export default function SearchBar() {
             autoCapitalize="off"
             autoComplete="off"
             autoCorrect="off"
+            className="destination"
             isMain={path === '/'}
             selected={selected === 2}
-            onChange={(e) => setDestination(e.target.value)}
+            onChange={(e) =>
+              setQueries({
+                ...queries,
+                destination: e.target.value,
+              })
+            }
             onFocus={() => setSelected(2)}
+            onBlur={() => {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              document.querySelector('.destination')!.value =
+                destination === undefined
+                  ? ''
+                  : destination === Location.CURRENT
+                  ? '내 현재 위치'
+                  : places.find((place) => place.id === destination)?.name;
+
+              setQueries({
+                ...queries,
+                destination: '',
+              });
+            }}
           ></Input>
         </div>
       </Container>
@@ -128,7 +180,7 @@ const Container = styled.div<{
   }
 
   & div:last-child {
-    top: 49px;
+    top: 48px;
   }
 `;
 

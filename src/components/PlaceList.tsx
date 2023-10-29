@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { places } from '../dummy';
 import CircleLocationSVG from '../assets/27-circle-location.svg';
-import CircleMapSVG from '../assets/27-circle-map.svg';
+// import CircleMapSVG from '../assets/27-circle-map.svg';
 import CircleSaveSVG from '../assets/27-circle-save.svg';
 import CircleSearchSVG from '../assets/27-circle-search.svg';
 import SaveSVG from '../assets/24-save.svg';
@@ -9,9 +9,18 @@ import UnsaveSVG from '../assets/24-unsave.svg';
 import { useSwipeable } from 'react-swipeable';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { savedAtom } from '../states/atom';
+import {
+  Location,
+  departureAtom,
+  destinationAtom,
+  savedAtom,
+  selectedAtom,
+} from '../states/atom';
 
 export default function PlaceList() {
+  const [selected] = useRecoilState(selectedAtom);
+  const [, setDeparture] = useRecoilState(departureAtom);
+  const [, setDestination] = useRecoilState(destinationAtom);
   const [saved, setSaved] = useRecoilState(savedAtom);
   const [lastObjInQueue, setLastObjInQueue] = useState<null | number>(null);
   const [lastObj, setLastObj] = useState<null | number>(null);
@@ -29,15 +38,23 @@ export default function PlaceList() {
 
   return (
     <Container {...handlers}>
-      <PlaceGroup>
+      {/* <PlaceGroup>
         <ContentsGroup>
           <IdenticalIcon src={CircleMapSVG} />
           <TextGroup>
             <Name>지도에서 고르기</Name>
           </TextGroup>
         </ContentsGroup>
-      </PlaceGroup>
-      <PlaceGroup>
+      </PlaceGroup> */}
+      <PlaceGroup
+        onTouchEnd={() => {
+          if (selected === 1) {
+            setDeparture(Location.CURRENT);
+          } else if (selected === 2) {
+            setDestination(Location.CURRENT);
+          }
+        }}
+      >
         <ContentsGroup>
           <IdenticalIcon src={CircleLocationSVG} />
           <TextGroup>
@@ -48,7 +65,19 @@ export default function PlaceList() {
       {places
         .filter((place) => saved.includes(place.id))
         .map((place, index) => (
-          <PlaceGroup key={index} onTouchStart={() => setLastObjInQueue(index)}>
+          <PlaceGroup
+            key={index}
+            onTouchStart={() => {
+              setLastObjInQueue(index);
+            }}
+            onTouchEnd={() => {
+              if (selected === 1) {
+                setDeparture(place.id);
+              } else if (selected === 2) {
+                setDestination(place.id);
+              }
+            }}
+          >
             <ContentsGroup swiped={lastObj === index && isSwiped}>
               <IdenticalIcon src={CircleSaveSVG} />
               <TextGroup>
@@ -77,7 +106,18 @@ export default function PlaceList() {
         .map((place, index) => (
           <PlaceGroup
             key={index}
-            onTouchStart={() => setLastObjInQueue(index + saved.length)}
+            onTouchStart={() => {
+              setLastObjInQueue(index + saved.length);
+            }}
+            onTouchEnd={() => {
+              if (selected === 1) {
+                //
+              } else if (selected === 2) {
+                setDestination(place.id);
+              }
+
+              return true;
+            }}
           >
             <ContentsGroup
               swiped={lastObj === index + saved.length && isSwiped}
@@ -91,13 +131,17 @@ export default function PlaceList() {
             <SaveButton
               type="save"
               swiped={lastObj === index + saved.length && isSwiped}
-              onTouchEnd={() => {
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+
                 setIsSwiped(false);
                 setLastObj(null);
                 setLastObjInQueue(null);
                 setTimeout(() => {
                   setSaved([...saved, place.id]);
                 }, 150);
+
+                e.stopPropagation();
               }}
             >
               <Icon src={SaveSVG} />
@@ -157,7 +201,7 @@ const Name = styled.p`
 `;
 
 const Address = styled.p`
-  top: 2px;
+  margin-top: 2px;
 
   color: var(--gray400);
   font-size: 13px;

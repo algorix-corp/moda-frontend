@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 import { saved, schedules } from '../dummy';
 
 export enum Location {
-  CURRENT,
+  CURRENT = -1,
 }
 
 export const queriesAtom = atom<{
@@ -16,12 +16,17 @@ export const queriesAtom = atom<{
   },
 });
 
-export const departureAtom = atom<string | Location.CURRENT | undefined>({
+export const selectedAtom = atom<number>({
+  key: 'selected',
+  default: 0,
+});
+
+export const departureAtom = atom<number | undefined>({
   key: 'departure',
   default: Location.CURRENT,
 });
 
-export const destinationAtom = atom<string | Location.CURRENT | undefined>({
+export const destinationAtom = atom<number | undefined>({
   key: 'destination',
   default: undefined,
 });
