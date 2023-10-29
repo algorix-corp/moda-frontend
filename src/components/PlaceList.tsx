@@ -128,7 +128,6 @@ export default function PlaceList() {
                 blurObject('destination');
               }
 
-              return true;
             }}
           >
             <ContentsGroup

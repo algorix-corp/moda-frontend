@@ -1,17 +1,10 @@
-import { styled } from 'styled-components';
+import {styled} from 'styled-components';
 import SearchSVG from '../assets/18-search.svg';
-import { useRecoilState } from 'recoil';
-import {
-  Location,
-  destinationAtom,
-  departureAtom,
-  pathAtom,
-  queriesAtom,
-  selectedAtom,
-} from '../states/atom';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { places } from '../dummy';
+import {useRecoilState} from 'recoil';
+import {departureAtom, destinationAtom, Location, pathAtom, queriesAtom, selectedAtom} from '../states/atom';
+import {useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {places} from '../dummy';
 
 export default function SearchBar() {
   const [queries, setQueries] = useRecoilState(queriesAtom);
@@ -26,10 +19,8 @@ export default function SearchBar() {
       setDeparture(undefined);
       setDestination(undefined);
 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       document.querySelector('.departure')!.value = null;
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       document.querySelector('.destination')!.value = null;
       setSelected(0);
@@ -53,14 +44,47 @@ export default function SearchBar() {
   ]);
 
   useEffect(() => {
-    console.log('DEPARTURE: ' + departure + '\nDESTINATION: ' + destination);
-  }, [departure, destination]);
+    if (path !== '/' && selected === 0) {
+      if (departure === undefined) {
+        setDeparture(Location.CURRENT);
+
+        // @ts-ignore
+        document.querySelector('.departure')!.value = '내 현재 위치';
+      } else {
+        // @ts-ignore
+        document.querySelector('.departure')!.value =
+          departure === Location.CURRENT
+            ? '내 현재 위치'
+            : places.find((place) => place.id === departure)?.name;
+      }
+    }
+  }, [departure, selected]);
+
+  useEffect(() => {
+    if (selected === 0) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (destination === undefined) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        document.querySelector('.destination')!.value = '';
+      } else if (destination === Location.CURRENT) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        document.querySelector('.destination')!.value = '내 현재 위치';
+      } else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        document.querySelector('.destination')!.value = places.find((place) => place.id === destination)?.name;
+      }
+    }
+  }, [destination, selected]);
 
   return (
     <div>
       <Container $isMain={path === '/'}>
         <div>
-          <SearchIcon src={SearchSVG} $isMain={path === '/'} />
+          <SearchIcon src={SearchSVG} $isMain={path === '/'}/>
           {path === '/' ? null : (
             <ToolTip $selected={selected === 1}>출발지</ToolTip>
           )}
@@ -96,21 +120,7 @@ export default function SearchBar() {
             }}
             onBlur={() => {
               if (path !== '/') {
-                if (departure === undefined) {
-                  setDeparture(Location.CURRENT);
-
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  document.querySelector('.departure')!.value = '내 현재 위치';
-                } else {
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  document.querySelector('.departure')!.value =
-                    departure === Location.CURRENT
-                      ? '내 현재 위치'
-                      : places.find((place) => place.id === departure)?.name;
-                }
-
+                setSelected(0);
                 setQueries({
                   ...queries,
                   destination: '',
@@ -143,9 +153,8 @@ export default function SearchBar() {
                   destination: '',
                 });
                 setDestination(undefined);
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
-                document.querySelector('.destination')!.value === '';
+                document.querySelector('.destination')!.value = '';
 
                 navigate('/search');
                 setPath('/search');
@@ -154,15 +163,7 @@ export default function SearchBar() {
               setSelected(2);
             }}
             onBlur={() => {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-              document.querySelector('.destination')!.value =
-                destination === undefined
-                  ? ''
-                  : destination === Location.CURRENT
-                  ? '내 현재 위치'
-                  : places.find((place) => place.id === destination)?.name;
-
+              setSelected(0);
               setQueries({
                 ...queries,
                 destination: '',
@@ -171,7 +172,7 @@ export default function SearchBar() {
           ></Input>
         </div>
       </Container>
-      <MockContainer $isMain={path === '/'} />
+      <MockContainer $isMain={path === '/'}/>
     </div>
   );
 }
