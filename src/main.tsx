@@ -6,6 +6,8 @@ import { RecoilRoot } from 'recoil';
 import Search from './pages/Search.tsx';
 import SearchBar from './components/SearchBar.tsx';
 import Navigator from './components/Navigator';
+import ErrorCatch from './components/ErrorBoundary';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const router = createBrowserRouter([
   {
@@ -28,12 +30,18 @@ const router = createBrowserRouter([
       </div>
     ),
   },
+  {
+    path: '*',
+    element: <ErrorCatch />,
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <>
-    <RecoilRoot>
-      <RouterProvider router={router} />
-    </RecoilRoot>
+    <ErrorBoundary fallbackRender={ErrorCatch}>
+      <RecoilRoot>
+        <RouterProvider router={router} />
+      </RecoilRoot>
+    </ErrorBoundary>
   </>
 );
