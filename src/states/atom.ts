@@ -1,8 +1,20 @@
 import { atom } from 'recoil';
+import { saved, schedules } from '../dummy';
 
 export enum Location {
   CURRENT,
 }
+
+export const queriesAtom = atom<{
+  departure: string;
+  destination: string;
+}>({
+  key: 'queries',
+  default: {
+    departure: '',
+    destination: '',
+  },
+});
 
 export const departureAtom = atom<string | Location.CURRENT | undefined>({
   key: 'departure',
@@ -17,4 +29,20 @@ export const destinationAtom = atom<string | Location.CURRENT | undefined>({
 export const pathAtom = atom<string>({
   key: 'path',
   default: window.location.pathname,
+});
+
+export const scheduleAtom = atom<
+  {
+    id: string;
+    address: string;
+    time: string;
+  }[]
+>({
+  key: 'schedule',
+  default: schedules,
+});
+
+export const savedAtom = atom<number[]>({
+  key: 'saved',
+  default: saved,
 });

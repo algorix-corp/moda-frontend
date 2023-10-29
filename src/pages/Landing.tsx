@@ -42,7 +42,7 @@ export default function Landing() {
               onTouchStart={() => setLastObjInQueue(index)}
             >
               <ScheduleTextGroup>
-                <Title swiped={lastObj === index && isSwiped}>{item.id}</Title>
+                <Name swiped={lastObj === index && isSwiped}>{item.id}</Name>
                 <Place swiped={lastObj === index && isSwiped}>
                   {item.address}
                 </Place>
@@ -114,7 +114,7 @@ const ScheduleTextGroup = styled.div`
   transform: translateY(-50%);
 `;
 
-const Title = styled.p<{
+const Name = styled.p<{
   swiped: boolean;
 }>`
   transform: translateX(${(props) => (props.swiped ? -60 : 0)}px);
@@ -126,7 +126,7 @@ const Title = styled.p<{
   overflow: hidden;
   white-space: nowrap;
 
-  transition: transform 100ms ease;
+  transition: transform 150ms ease;
 `;
 
 const Place = styled.p<{
@@ -143,7 +143,7 @@ const Place = styled.p<{
   overflow: hidden;
   white-space: nowrap;
 
-  transition: transform 100ms ease;
+  transition: transform 150ms ease;
 `;
 
 const Time = styled.p<{

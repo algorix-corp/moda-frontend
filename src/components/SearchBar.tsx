@@ -28,70 +28,94 @@ export default function SearchBar() {
   }, [path, setDeparture]);
 
   return (
-    <Container isMain={path === '/'}>
-      <div>
-        <SearchIcon src={SearchSVG} isMain={path === '/'} />
-        {path === '/' ? null : (
-          <ToolTip selected={selected === 1}>출발지</ToolTip>
-        )}
-        <Input
-          placeholder="오늘은 어디를 가고 싶으신가요?"
-          type="text"
-          className="departure"
-          isMain={path === '/'}
-          selected={selected === 1}
-          value={departure === Location.CURRENT ? '내 현재 위치' : departure}
-          onChange={(e) => setDeparture(e.target.value)}
-          onFocus={() => {
-            navigate('/search');
-            setPath('/search');
-            setSelected(1);
-          }}
-          onBlur={() => {
-            if (
-              departure !== Location.CURRENT &&
-              (departure === undefined ||
-                departure.replaceAll(' ', '') === '') &&
-              path !== '/'
-            ) {
-              setDeparture(Location.CURRENT);
-            }
-          }}
-        ></Input>
-      </div>
-      <div>
-        <ToolTip selected={selected === 2}>목적지</ToolTip>
-        <Input
-          placeholder="목적지를 입력하세요."
-          type="text"
-          isMain={path === '/'}
-          selected={selected === 2}
-          value={destination}
-          onChange={(e) => setDestination(e.target.value)}
-          onFocus={() => setSelected(2)}
-        ></Input>
-      </div>
-    </Container>
+    <div>
+      <Container isMain={path === '/'}>
+        <div>
+          <SearchIcon src={SearchSVG} isMain={path === '/'} />
+          {path === '/' ? null : (
+            <ToolTip selected={selected === 1}>출발지</ToolTip>
+          )}
+          <Input
+            placeholder="오늘은 어디를 가고 싶으신가요?"
+            type="search"
+            autoCapitalize="off"
+            autoComplete="off"
+            autoCorrect="off"
+            className="departure"
+            isMain={path === '/'}
+            selected={selected === 1}
+            onChange={(e) => setDeparture(e.target.value)}
+            onFocus={() => {
+              if (path === '/') {
+                navigate('/search');
+                setPath('/search');
+              }
+
+              setSelected(1);
+            }}
+            onBlur={() => {
+              if (
+                departure !== Location.CURRENT &&
+                (departure === undefined ||
+                  departure.replaceAll(' ', '') === '') &&
+                path !== '/'
+              ) {
+                setDeparture(Location.CURRENT);
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                document.querySelector('.departure')!.value = '내 현재 위치';
+              }
+            }}
+          ></Input>
+        </div>
+        <div>
+          <ToolTip selected={selected === 2}>목적지</ToolTip>
+          <Input
+            placeholder="목적지를 입력하세요."
+            type="search"
+            autoCapitalize="off"
+            autoComplete="off"
+            autoCorrect="off"
+            isMain={path === '/'}
+            selected={selected === 2}
+            onChange={(e) => setDestination(e.target.value)}
+            onFocus={() => setSelected(2)}
+          ></Input>
+        </div>
+      </Container>
+      <MockContainer isMain={path === '/'} />
+    </div>
   );
 }
+
+const MockContainer = styled.div<{
+  isMain: boolean;
+}>`
+  width: 100vw;
+  height: ${(props) => (props.isMain ? 50 : 100)}px;
+
+  transition: height 150ms ease;
+`;
 
 const Container = styled.div<{
   isMain: boolean;
 }>`
-  position: relative;
+  position: fixed;
   width: calc(100vw - 40px);
   height: ${(props) => (props.isMain ? 50 : 100)}px;
   left: 20px;
 
   display: flex;
-  /* align-items: */
   overflow: hidden;
 
   border-radius: 25px;
   border: 1px solid var(--gray200);
+  background-color: var(--white);
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.05);
 
   transition: height 150ms ease;
+
+  z-index: 1;
 
   & div {
     position: absolute;
@@ -127,13 +151,13 @@ const Input = styled.input<{
   position: absolute;
   left: 20px;
   width: calc(100% - 40px);
-  height: 48px;
+  height: 50px;
 
   padding-top: ${(props) => (props.selected && !props.isMain ? 17 : 0)}px;
   padding-left: ${(props) => (props.isMain ? 28 : 0)}px;
 
   color: var(--black);
-  background-color: #ffffff00;
+  background-color: var(--white) 00;
   font-size: 16px;
 
   outline: none;
