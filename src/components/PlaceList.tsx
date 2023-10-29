@@ -78,7 +78,7 @@ export default function PlaceList() {
               }
             }}
           >
-            <ContentsGroup swiped={lastObj === index && isSwiped}>
+            <ContentsGroup $swiped={lastObj === index && isSwiped}>
               <IdenticalIcon src={CircleSaveSVG} />
               <TextGroup>
                 <Name>{place.name}</Name>
@@ -87,7 +87,7 @@ export default function PlaceList() {
             </ContentsGroup>
             <SaveButton
               type="unsave"
-              swiped={lastObj === index && isSwiped}
+              $swiped={lastObj === index && isSwiped}
               onTouchEnd={() => {
                 setIsSwiped(false);
                 setLastObj(null);
@@ -120,7 +120,7 @@ export default function PlaceList() {
             }}
           >
             <ContentsGroup
-              swiped={lastObj === index + saved.length && isSwiped}
+              $swiped={lastObj === index + saved.length && isSwiped}
             >
               <IdenticalIcon src={CircleSearchSVG} />
               <TextGroup>
@@ -130,7 +130,7 @@ export default function PlaceList() {
             </ContentsGroup>
             <SaveButton
               type="save"
-              swiped={lastObj === index + saved.length && isSwiped}
+              $swiped={lastObj === index + saved.length && isSwiped}
               onTouchEnd={(e) => {
                 e.stopPropagation();
 
@@ -171,14 +171,14 @@ const PlaceGroup = styled.div`
 `;
 
 const ContentsGroup = styled.div<{
-  swiped?: boolean;
+  $swiped?: boolean;
 }>`
   position: relative;
   left: 20px;
   width: calc(100% - 40px);
   height: 100%;
 
-  transform: translateX(${(props) => (props.swiped ? -60 : 0)}px);
+  transform: translateX(${(props) => (props.$swiped ? -60 : 0)}px);
 
   display: flex;
   align-items: center;
@@ -217,13 +217,13 @@ const Icon = styled.img`
 
 const SaveButton = styled.div<{
   type: 'save' | 'unsave';
-  swiped: boolean;
+  $swiped: boolean;
 }>`
   position: relative;
   width: 60px;
   height: 75px;
 
-  transform: translateX(${(props) => (props.swiped ? 0 : 60)}px);
+  transform: translateX(${(props) => (props.$swiped ? 0 : 60)}px);
   z-index: 1;
 
   background-color: var(

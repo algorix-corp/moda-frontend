@@ -42,13 +42,13 @@ export default function Landing() {
               onTouchStart={() => setLastObjInQueue(index)}
             >
               <ScheduleTextGroup>
-                <Name swiped={lastObj === index && isSwiped}>{item.id}</Name>
-                <Place swiped={lastObj === index && isSwiped}>
+                <Name $swiped={lastObj === index && isSwiped}>{item.id}</Name>
+                <Place $swiped={lastObj === index && isSwiped}>
                   {item.address}
                 </Place>
               </ScheduleTextGroup>
-              <Time swiped={lastObj === index && isSwiped}>{item.time}</Time>
-              <DeleteButton swiped={lastObj === index && isSwiped}>
+              <Time $swiped={lastObj === index && isSwiped}>{item.time}</Time>
+              <DeleteButton $swiped={lastObj === index && isSwiped}>
                 <CancelIcon src={CancelSVG} />
               </DeleteButton>
             </Schedule>
@@ -115,9 +115,9 @@ const ScheduleTextGroup = styled.div`
 `;
 
 const Name = styled.p<{
-  swiped: boolean;
+  $swiped: boolean;
 }>`
-  transform: translateX(${(props) => (props.swiped ? -60 : 0)}px);
+  transform: translateX(${(props) => (props.$swiped ? -60 : 0)}px);
 
   color: var(--black);
   font-size: 17px;
@@ -130,11 +130,11 @@ const Name = styled.p<{
 `;
 
 const Place = styled.p<{
-  swiped: boolean;
+  $swiped: boolean;
 }>`
   margin-top: 2px;
 
-  transform: translateX(${(props) => (props.swiped ? -60 : 0)}px);
+  transform: translateX(${(props) => (props.$swiped ? -60 : 0)}px);
 
   color: var(--gray400);
   font-size: 13px;
@@ -147,11 +147,11 @@ const Place = styled.p<{
 `;
 
 const Time = styled.p<{
-  swiped: boolean;
+  $swiped: boolean;
 }>`
   position: relative;
   top: 50%;
-  right: ${(props) => (props.swiped ? 60 : 0)}px;
+  right: ${(props) => (props.$swiped ? 60 : 0)}px;
 
   float: right;
   transform: translateY(-50%);
@@ -163,7 +163,7 @@ const Time = styled.p<{
 `;
 
 const DeleteButton = styled.div<{
-  swiped: boolean;
+  $swiped: boolean;
 }>`
   position: relative;
   width: 60px;
@@ -171,7 +171,7 @@ const DeleteButton = styled.div<{
   left: 100%;
   right: 0;
 
-  transform: translateX(${(props) => (props.swiped ? -35 : 25)}px);
+  transform: translateX(${(props) => (props.$swiped ? -35 : 25)}px);
 
   background-color: var(--redSub);
 
