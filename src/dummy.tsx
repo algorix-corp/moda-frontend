@@ -52,9 +52,4 @@ export const places: {
     name: '하나은행 서소문지점',
     address: '서울특별시 중구 서소문로 110',
   },
-  {
-    id: 6,
-    name: '하나은행 서소문지점',
-    address: '서울특별시 중구 서소문로 110',
-  },
 ];

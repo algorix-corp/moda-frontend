@@ -6,7 +6,6 @@ import CircleSaveSVG from '../assets/27-circle-save.svg';
 import CircleSearchSVG from '../assets/27-circle-search.svg';
 import SaveSVG from '../assets/24-save.svg';
 import UnsaveSVG from '../assets/24-unsave.svg';
-import CancelSVG from '../assets/24-cancel.svg';
 import { useSwipeable } from 'react-swipeable';
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -49,11 +48,7 @@ export default function PlaceList() {
       {places
         .filter((place) => saved.includes(place.id))
         .map((place, index) => (
-          <PlaceGroup
-            key={index}
-            onClick={() => setLastObjInQueue(index)}
-            onTouchStart={() => setLastObjInQueue(index)}
-          >
+          <PlaceGroup key={index} onTouchStart={() => setLastObjInQueue(index)}>
             <ContentsGroup swiped={lastObj === index && isSwiped}>
               <IdenticalIcon src={CircleSaveSVG} />
               <TextGroup>
@@ -61,7 +56,18 @@ export default function PlaceList() {
                 <Address>{place.address}</Address>
               </TextGroup>
             </ContentsGroup>
-            <SaveButton type="unsave" swiped={lastObj === index && isSwiped}>
+            <SaveButton
+              type="unsave"
+              swiped={lastObj === index && isSwiped}
+              onTouchEnd={() => {
+                setIsSwiped(false);
+                setLastObj(null);
+                setLastObjInQueue(null);
+                setTimeout(() => {
+                  setSaved(saved.filter((item) => item !== place.id));
+                }, 150);
+              }}
+            >
               <Icon src={UnsaveSVG} />
             </SaveButton>
           </PlaceGroup>
@@ -71,7 +77,6 @@ export default function PlaceList() {
         .map((place, index) => (
           <PlaceGroup
             key={index}
-            onClick={() => setLastObjInQueue(index + saved.length)}
             onTouchStart={() => setLastObjInQueue(index + saved.length)}
           >
             <ContentsGroup
@@ -86,6 +91,14 @@ export default function PlaceList() {
             <SaveButton
               type="save"
               swiped={lastObj === index + saved.length && isSwiped}
+              onTouchEnd={() => {
+                setIsSwiped(false);
+                setLastObj(null);
+                setLastObjInQueue(null);
+                setTimeout(() => {
+                  setSaved([...saved, place.id]);
+                }, 150);
+              }}
             >
               <Icon src={SaveSVG} />
             </SaveButton>
@@ -153,9 +166,9 @@ const Address = styled.p`
 const Icon = styled.img`
   position: relative;
   top: 50%;
-  left: 50%;
+  right: -17px;
 
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
 `;
 
 const SaveButton = styled.div<{
@@ -167,6 +180,7 @@ const SaveButton = styled.div<{
   height: 75px;
 
   transform: translateX(${(props) => (props.swiped ? 0 : 60)}px);
+  z-index: 1;
 
   background-color: var(
     --${(props) => (props.type === 'save' ? 'primarySub' : 'redSub')}

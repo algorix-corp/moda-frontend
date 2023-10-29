@@ -75,8 +75,6 @@ const Button = styled.div<{
   width: 50px;
   height: 50px;
 
-  -webkit-tap-highlight-color: transparent;
-
   & div {
     position: relative;
     top: 50%;

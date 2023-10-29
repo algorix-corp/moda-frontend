@@ -115,7 +115,7 @@ const Container = styled.div<{
 
   transition: height 150ms ease;
 
-  z-index: 1;
+  z-index: 2;
 
   & div {
     position: absolute;
@@ -162,8 +162,6 @@ const Input = styled.input<{
 
   outline: none;
   border: none;
-
-  -webkit-tap-highlight-color: transparent;
 
   transition: padding 150ms ease;
 

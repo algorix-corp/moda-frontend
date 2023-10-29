@@ -33,7 +33,7 @@ const router = createBrowserRouter([
   {
     path: '*',
     element: <ErrorCatch />,
-  }
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
