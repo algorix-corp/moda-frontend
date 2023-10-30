@@ -4,7 +4,7 @@ import {useRecoilState} from 'recoil';
 import {departureAtom, destinationAtom, Location, pathAtom, queriesAtom, selectedAtom, tokenAtom} from '../states/atom';
 import {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {places} from '../dummy';
+import {places} from '../dummy.ts';
 
 export default function SearchBar() {
   const [queries, setQueries] = useRecoilState(queriesAtom);
@@ -13,7 +13,7 @@ export default function SearchBar() {
   const [path, setPath] = useRecoilState(pathAtom);
   const [selected, setSelected] = useRecoilState(selectedAtom);
   const navigate = useNavigate();
-  const [token] = useRecoilState(tokenAtom);
+  //const [token] = useRecoilState(tokenAtom);
 
   useEffect(() => {
     if (path === '/') {
@@ -64,7 +64,8 @@ export default function SearchBar() {
             : places.find((place) => place.id === departure)?.name;
       }
     }
-  }, [departure, selected]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [departure, path]);
 
   useEffect(() => {
     if (selected === 0) {

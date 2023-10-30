@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { useSwipeable } from 'react-swipeable';
 import { useState } from 'react';
-import { schedules } from '../dummy';
+import { schedules } from '../dummy.ts';
 import CancelSVG from '../assets/24-cancel.svg';
 import CircleWarningSVG from '../assets/65-circle-warning.svg';
+import {Link} from 'react-router-dom';
 
 export default function Landing() {
     const [lastObjInQueue, setLastObjInQueue] = useState<null | number>(null);
@@ -55,6 +56,7 @@ export default function Landing() {
                     ))
                 )}
             </ScheduleGroup>
+            <Link to={'/login'}>로그인테스트</Link>
         </Container>
     );
 }

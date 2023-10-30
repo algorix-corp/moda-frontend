@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { places } from '../dummy';
+import { places } from '../dummy.ts';
 import CircleLocationSVG from '../assets/27-circle-location.svg';
 // import CircleMapSVG from '../assets/27-circle-map.svg';
 import CircleSaveSVG from '../assets/27-circle-save.svg';

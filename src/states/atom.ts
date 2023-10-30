@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { saved, schedules } from '../dummy';
+import { saved, schedules } from '../dummy.ts';
 
 export enum Location {
   CURRENT = -1,
