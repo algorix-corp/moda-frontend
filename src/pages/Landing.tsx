@@ -6,57 +6,57 @@ import CancelSVG from '../assets/24-cancel.svg';
 import CircleWarningSVG from '../assets/65-circle-warning.svg';
 
 export default function Landing() {
-  const [lastObjInQueue, setLastObjInQueue] = useState<null | number>(null);
-  const [lastObj, setLastObj] = useState<null | number>(null);
-  const [isSwiped, setIsSwiped] = useState<boolean>(false);
+    const [lastObjInQueue, setLastObjInQueue] = useState<null | number>(null);
+    const [lastObj, setLastObj] = useState<null | number>(null);
+    const [isSwiped, setIsSwiped] = useState<boolean>(false);
 
-  const handlers = useSwipeable({
-    onSwipedLeft: () => {
-      setIsSwiped(true);
-      setLastObj(lastObjInQueue);
-      setLastObjInQueue(null);
-    },
-    onSwipedRight: () => setIsSwiped(false),
-    onTap: () => setIsSwiped(false),
-  });
+    const handlers = useSwipeable({
+        onSwipedLeft: () => {
+            setIsSwiped(true);
+            setLastObj(lastObjInQueue);
+            setLastObjInQueue(null);
+        },
+        onSwipedRight: () => setIsSwiped(false),
+        onTap: () => setIsSwiped(false),
+    });
 
-  return (
-    <Container>
-      <TextGroup>
-        <Text>
-          미기님의{'\n'}
-          <span>DRT</span> 예약 일정이에요.
-        </Text>
-      </TextGroup>
-      <ScheduleGroup {...handlers}>
-        {schedules.length === 0 ? (
-          <ExceptionGroup>
-            <CircleWarningIcon src={CircleWarningSVG} />
-            <WarningText>예약된 일정이 없어요.</WarningText>
-          </ExceptionGroup>
-        ) : (
-          schedules.map((item, index) => (
-            <Schedule
-              key={index}
-              onClick={() => setLastObjInQueue(index)}
-              onTouchStart={() => setLastObjInQueue(index)}
-            >
-              <ScheduleTextGroup>
-                <Name $swiped={lastObj === index && isSwiped}>{item.id}</Name>
-                <Place $swiped={lastObj === index && isSwiped}>
-                  {item.address}
-                </Place>
-              </ScheduleTextGroup>
-              <Time $swiped={lastObj === index && isSwiped}>{item.time}</Time>
-              <DeleteButton $swiped={lastObj === index && isSwiped}>
-                <CancelIcon src={CancelSVG} />
-              </DeleteButton>
-            </Schedule>
-          ))
-        )}
-      </ScheduleGroup>
-    </Container>
-  );
+    return (
+        <Container>
+            <TextGroup>
+                <Text>
+                    미기님의{'\n'}
+                    <span>DRT</span> 예약 일정이에요.
+                </Text>
+            </TextGroup>
+            <ScheduleGroup {...handlers}>
+                {schedules.length === 0 ? (
+                    <ExceptionGroup>
+                        <CircleWarningIcon src={CircleWarningSVG} />
+                        <WarningText>예약된 일정이 없어요.</WarningText>
+                    </ExceptionGroup>
+                ) : (
+                    schedules.map((item, index) => (
+                        <Schedule
+                            key={index}
+                            onClick={() => setLastObjInQueue(index)}
+                            onTouchStart={() => setLastObjInQueue(index)}
+                        >
+                            <ScheduleTextGroup>
+                                <Name $swiped={lastObj === index && isSwiped}>{item.id}</Name>
+                                <Place $swiped={lastObj === index && isSwiped}>
+                                    {item.address}
+                                </Place>
+                            </ScheduleTextGroup>
+                            <Time $swiped={lastObj === index && isSwiped}>{item.time}</Time>
+                            <DeleteButton $swiped={lastObj === index && isSwiped}>
+                                <CancelIcon src={CancelSVG} />
+                            </DeleteButton>
+                        </Schedule>
+                    ))
+                )}
+            </ScheduleGroup>
+        </Container>
+    );
 }
 
 const Container = styled.div``;
@@ -115,7 +115,7 @@ const ScheduleTextGroup = styled.div`
 `;
 
 const Name = styled.p<{
-  $swiped: boolean;
+    $swiped: boolean;
 }>`
   transform: translateX(${(props) => (props.$swiped ? -60 : 0)}px);
 
@@ -130,7 +130,7 @@ const Name = styled.p<{
 `;
 
 const Place = styled.p<{
-  $swiped: boolean;
+    $swiped: boolean;
 }>`
   margin-top: 2px;
 
@@ -147,7 +147,7 @@ const Place = styled.p<{
 `;
 
 const Time = styled.p<{
-  $swiped: boolean;
+    $swiped: boolean;
 }>`
   position: relative;
   top: 50%;
@@ -163,7 +163,7 @@ const Time = styled.p<{
 `;
 
 const DeleteButton = styled.div<{
-  $swiped: boolean;
+    $swiped: boolean;
 }>`
   position: relative;
   width: 60px;
