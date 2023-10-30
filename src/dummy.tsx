@@ -4,7 +4,7 @@ export const schedules: {
   time: string;
 }[] = [
   {
-    id: 'DRT 부산 2호차',
+    id: 'DRT 부산 110호차',
     address: '동아대학교 구덕캠퍼스',
     time: '15:22',
   },
