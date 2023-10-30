@@ -12,7 +12,7 @@ export default function Navigator() {
       <Container>
         <Button
           onClick={() => {
-            navigate('/');
+            navigate('/', {replace: true});
             setPath('/');
           }}
           $highlighted={path === '/'}

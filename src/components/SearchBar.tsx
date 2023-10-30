@@ -30,7 +30,7 @@ export default function SearchBar() {
       departure !== undefined &&
       destination !== undefined
     ) {
-      navigate('/preview');
+      navigate('/preview', {replace: true});
       setPath('/preview');
     }
     /* ===========DISABLE ONCE LOGIN DONE===========
@@ -120,7 +120,7 @@ export default function SearchBar() {
               });
               setDeparture(undefined);
 
-              navigate('/search');
+              navigate('/search', {replace: true});
               setPath('/search');
 
               setSelected(1);
@@ -163,7 +163,7 @@ export default function SearchBar() {
                 // @ts-ignore
                 document.querySelector('.destination')!.value = '';
 
-                navigate('/search');
+                navigate('/search', {replace: true});
                 setPath('/search');
               }
 

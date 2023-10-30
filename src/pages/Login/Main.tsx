@@ -24,9 +24,9 @@ export default function Login() {
     };
     api.post('/auth/send_auth_code', body).then((r) => {
       if (r.data.registered) {
-        navigate('/login/verify');
+        navigate('/login/verify', {replace: true});
       } else {
-        navigate('/login/register');
+        navigate('/login/register', {replace: true});
       }
       setLoading(false);
     }).catch(() => {
