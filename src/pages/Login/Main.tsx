@@ -1,7 +1,7 @@
 import {styled} from 'styled-components';
 import Complex from '../../components/Complex';
 import {useState} from 'react';
-import api from '../../requests/api.ts';
+import api from '../../api.ts';
 import {useNavigate} from 'react-router-dom';
 
 
