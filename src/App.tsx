@@ -6,7 +6,7 @@ import Search from './pages/Search.tsx';
 import Preview from './pages/Preview.tsx';
 import Login from './pages/Login/Main.tsx';
 import ErrorCatch from './components/ErrorBoundary.tsx';
-import {isMobile} from 'react-device-detect';
+import {isMobileOnly} from 'react-device-detect';
 import ModaLogo from './assets/moda-logo.svg';
 import styled from 'styled-components';
 
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  if (isMobile) {
+  if (isMobileOnly) {
     return <RouterProvider router={router}/>;
   } else {
     return (
