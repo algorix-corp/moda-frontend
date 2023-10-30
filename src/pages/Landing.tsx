@@ -56,7 +56,7 @@ export default function Landing() {
                     ))
                 )}
             </ScheduleGroup>
-            <Link to={'/login'}>로그인테스트</Link>
+            <Link to={'/login'} replace>로그인테스트</Link>
         </Container>
     );
 }
