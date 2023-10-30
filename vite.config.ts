@@ -14,8 +14,5 @@ export default defineConfig({
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'safari-pinned-tab.svg'],
     })
-  ],
-  build: {
-    cssMinify: 'lightningcss'
-  }
+  ]
 })
