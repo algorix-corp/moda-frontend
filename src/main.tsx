@@ -9,7 +9,15 @@ import Navigator from './components/Navigator';
 import ErrorCatch from './components/ErrorBoundary';
 import { ErrorBoundary } from 'react-error-boundary';
 import Preview from './pages/Preview.tsx';
+import { registerSW } from 'virtual:pwa-register'
 
+const updateSW = registerSW({
+  onNeedRefresh() {
+    if(confirm('New version available. Refresh now?')) {
+      updateSW().then()
+    }
+  }
+})
 const router = createBrowserRouter([
   {
     path: '/',
