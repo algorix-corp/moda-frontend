@@ -17,7 +17,8 @@ const updateSW = registerSW({
       updateSW().then()
     }
   }
-})
+});
+
 const router = createBrowserRouter([
   {
     path: '/',

@@ -1,7 +1,7 @@
 import {styled} from 'styled-components';
 import SearchSVG from '../assets/18-search.svg';
 import {useRecoilState} from 'recoil';
-import {departureAtom, destinationAtom, Location, pathAtom, queriesAtom, selectedAtom} from '../states/atom';
+import {departureAtom, destinationAtom, Location, pathAtom, queriesAtom, selectedAtom, tokenAtom} from '../states/atom';
 import {useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {places} from '../dummy';
@@ -13,6 +13,7 @@ export default function SearchBar() {
   const [path, setPath] = useRecoilState(pathAtom);
   const [selected, setSelected] = useRecoilState(selectedAtom);
   const navigate = useNavigate();
+  const [token] = useRecoilState(tokenAtom);
 
   useEffect(() => {
     if (path === '/') {
@@ -32,6 +33,11 @@ export default function SearchBar() {
       navigate('/preview');
       setPath('/preview');
     }
+    /* ===========DISABLE ONCE LOGIN DONE===========
+    if (token===undefined) {
+      navigate('/login');
+    }
+    */
   }, [
     departure,
     destination,

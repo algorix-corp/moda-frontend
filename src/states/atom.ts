@@ -51,3 +51,15 @@ export const savedAtom = atom<number[]>({
   key: 'saved',
   default: saved,
 });
+
+interface Token {
+  id: string;
+  phone_number: string;
+  username: string;
+  card_number: string;
+}
+
+export const tokenAtom = atom<Token|undefined>({
+  key: 'token',
+  default: undefined
+})
