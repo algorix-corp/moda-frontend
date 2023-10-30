@@ -13,7 +13,7 @@ import { registerSW } from 'virtual:pwa-register'
 
 const updateSW = registerSW({
   onNeedRefresh() {
-    if(confirm('New version available. Refresh now?')) {
+    if(confirm('새로운 버전을 사용할 수 있습니다. 지금 업데이트할까요?')) {
       updateSW().then()
     }
   }
