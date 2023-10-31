@@ -1,8 +1,8 @@
-import {styled} from 'styled-components';
+import { styled } from 'styled-components';
 import Complex from '../../components/Complex';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import api from '../../api.ts';
-import {useNavigate, useSearchParams} from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function Login() {
   const [number, setNumber] = useState<string>('');
@@ -27,9 +27,9 @@ export default function Login() {
       .post('/auth/send_auth_code', body)
       .then((r) => {
         if (r.data.registered) {
-          navigate('/login/verify?phone=' + number, {replace: true});
+          navigate('/login/verify?phone=' + number, { replace: true });
         } else {
-          navigate('/login/register?phone=' + number, {replace: true});
+          navigate('/login/register?phone=' + number, { replace: true });
         }
         setLoading(false);
       })
@@ -42,7 +42,7 @@ export default function Login() {
     if (phone !== null) {
       setNumber(phone);
     }
-  }, [phone])
+  }, [phone]);
   return (
     <Complex
       title="모다 시작하기"
@@ -67,7 +67,9 @@ export default function Login() {
       errormessage={errormsg}
       leftloretext="스킵"
       rightbtntext="계속하기"
-      leftloreclick={() => navigate(`/login/verify?phone=${number}`, {replace: true})}
+      leftloreclick={() =>
+        navigate(`/login/verify?phone=${number}`, { replace: true })
+      }
       rightbtnclick={handleContinue}
       disabled={loading}
     />
@@ -81,7 +83,7 @@ const Input = styled.input`
   font-size: 16px;
   padding: 0 15px;
   outline: none;
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--gray200);
   border-radius: 10px;
 
   margin-top: 30px;

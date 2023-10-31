@@ -33,9 +33,9 @@ export default function Complex({
         <LeftLore disabled={disabled} onClick={leftloreclick}>
           <Title>{leftloretext}</Title>
         </LeftLore>
-          <RightBtn disabled={disabled} onClick={rightbtnclick}>
-            {rightbtntext}
-          </RightBtn>
+        <RightBtn disabled={disabled} onClick={rightbtnclick}>
+          {rightbtntext}
+        </RightBtn>
       </MenuGroup>
     </Container>
   );
@@ -59,12 +59,12 @@ const Title = styled.p`
 `;
 
 const Description = styled.p`
-  margin-top: 10px;
+  margin-top: 15px;
 
   white-space: pre;
 
   color: var(--black);
-  font-size: 15px;
+  font-size: 16px;
 `;
 
 const ErrorText = styled.p`
@@ -79,39 +79,41 @@ const ErrorText = styled.p`
   }
 `;
 
+const MenuGroup = styled.div`
+  margin-top: 15px;
+  width: 100%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 const RightBtn = styled.button`
   color: var(--white);
   background-color: var(--black);
   font-size: 14px;
-  font-weight: 600;
   outline: none;
   border: none;
   padding: 12px 22px;
-  margin-top: 15px;
   border-radius: 22px;
   width: fit-content;
 `;
 
 const LeftLore = styled.button`
+  position: relative;
+  top: 50%;
   height: 100%;
+
+  transform: translateY(-50%);
+
   outline: none;
   background-color: transparent;
   border: none;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  
+
   & p {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
     text-decoration: underline;
   }
-`;
-
-const MenuGroup = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
 `;
