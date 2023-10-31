@@ -1,14 +1,16 @@
-import { styled } from 'styled-components';
+import {styled} from 'styled-components';
 import Complex from '../../components/Complex';
-import { useState } from 'react';
+import {useState} from 'react';
 import api from '../../api.ts';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate, useSearchParams} from 'react-router-dom';
 
 export default function Login() {
   const [number, setNumber] = useState<string>('');
   const [errormsg, setErrormsg] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const phone = params.get('phone');
   const handleContinue = () => {
     // 01012345678 regex
     const regex = new RegExp(/^01(?:0|1|[6-9])(?:\d{3}|\d{4})\d{4}$/);
@@ -25,9 +27,9 @@ export default function Login() {
       .post('/auth/send_auth_code', body)
       .then((r) => {
         if (r.data.registered) {
-          navigate('/login/verify', { replace: true });
+          navigate('/login/verify?phone=' + number, {replace: true});
         } else {
-          navigate('/login/register', { replace: true });
+          navigate('/login/register?phone=' + number, {replace: true});
         }
         setLoading(false);
       })
@@ -44,6 +46,7 @@ export default function Login() {
         <Input
           placeholder="전화번호를 입력하세요."
           type="tel"
+          value={phone ?? number}
           autoCapitalize="off"
           autoComplete="off"
           autoCorrect="off"
@@ -59,7 +62,7 @@ export default function Login() {
       errormessage={errormsg}
       leftloretext="스킵"
       rightbtntext="계속하기"
-      leftloreclick={() => navigate('/login/verify', {replace: true})}
+      leftloreclick={() => navigate(`/login/verify?phone=${number}`, {replace: true})}
       rightbtnclick={handleContinue}
       disabled={loading}
     />

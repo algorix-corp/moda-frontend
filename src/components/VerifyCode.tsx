@@ -3,22 +3,24 @@ import styled from 'styled-components';
 import React, {useState} from 'react';
 
 export default function VerifyCode({
-    title,
-    description,
-    leftloretext,
-    rightbtntext,
-    leftloreclick,
-    rightbtnclick,
+                                       title,
+                                       description,
+                                       leftloretext,
+                                       rightbtntext,
+                                       leftloreclick,
+                                       rightbtnclick,
+    errormsg,
+    loading,
                                    }: {
     title: string;
     description: string;
     leftloretext: string;
     rightbtntext: string;
     leftloreclick: () => void;
-    rightbtnclick: () => void;
+    rightbtnclick: (authcode: number|undefined) => void;
+    errormsg?: string;
+    loading: boolean;
 }) {
-    const [loading, setLoading] = useState<boolean>(false);
-    const [errormsg, setErrormsg] = useState<string | undefined>(undefined);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         e.target.value = value.replace(/\D/g, '');
@@ -40,6 +42,26 @@ export default function VerifyCode({
             const nextSibling = e.target.nextSibling as HTMLInputElement;
             if (e.target.id !== '6') {
                 nextSibling.focus();
+            }
+        }
+        if (e.target.id === '6') {
+            // check if all inputs are filled
+            let previous = e.target.previousSibling as HTMLInputElement;
+            let allFilled = true;
+            while(allFilled && previous !== null) {
+                if (previous.value === '') {
+                    allFilled = false;
+                }
+                previous = previous.previousSibling as HTMLInputElement;
+            }
+            if (allFilled) {
+                const authcode = Number((document.querySelector('#1') as HTMLInputElement).value) * 100000 +
+                    Number((document.querySelector('#2') as HTMLInputElement).value) * 10000 +
+                    Number((document.querySelector('#3') as HTMLInputElement).value) * 1000 +
+                    Number((document.querySelector('#4') as HTMLInputElement).value) * 100 +
+                    Number((document.querySelector('#5') as HTMLInputElement).value) * 10 +
+                    Number((document.querySelector('#6') as HTMLInputElement).value);
+                rightbtnclick(authcode);
             }
         }
     };
@@ -73,19 +95,33 @@ export default function VerifyCode({
             description={description}
             content={(
                 <VerifyArea>
-                    <OneNumber id="1" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text" inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="2" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text" inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="3" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text" inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="4" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text" inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="5" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text" inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="6" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text" inputMode="numeric" autoComplete="one-time-code"/>
+                    <OneNumber id="1" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                               inputMode="numeric" autoComplete="one-time-code"/>
+                    <OneNumber id="2" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                               inputMode="numeric" autoComplete="one-time-code"/>
+                    <OneNumber id="3" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                               inputMode="numeric" autoComplete="one-time-code"/>
+                    <OneNumber id="4" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                               inputMode="numeric" autoComplete="one-time-code"/>
+                    <OneNumber id="5" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                               inputMode="numeric" autoComplete="one-time-code"/>
+                    <OneNumber id="6" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                               inputMode="numeric" autoComplete="one-time-code"/>
                 </VerifyArea>
             )}
             errormessage={errormsg}
             leftloretext={leftloretext}
             rightbtntext={rightbtntext}
             leftloreclick={leftloreclick}
-            rightbtnclick={rightbtnclick}
+            rightbtnclick={() => {
+                const authcode = Number((document.querySelector('#1') as HTMLInputElement).value) * 100000 +
+                    Number((document.querySelector('#2') as HTMLInputElement).value) * 10000 +
+                    Number((document.querySelector('#3') as HTMLInputElement).value) * 1000 +
+                    Number((document.querySelector('#4') as HTMLInputElement).value) * 100 +
+                    Number((document.querySelector('#5') as HTMLInputElement).value) * 10 +
+                    Number((document.querySelector('#6') as HTMLInputElement).value);
+                rightbtnclick(authcode);
+            }}
             disabled={loading}
         />
     );
