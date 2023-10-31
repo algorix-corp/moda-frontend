@@ -52,9 +52,9 @@ export default function Login() {
         />
       }
       errormessage={errormsg}
-      leftloretext=""
+      leftloretext="스킵"
       rightbtntext="계속하기"
-      leftloreclick={() => alert('yee')}
+      leftloreclick={() => navigate('/login/verify', {replace: true})}
       rightbtnclick={handleContinue}
       disabled={loading}
     />

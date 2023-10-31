@@ -27,14 +27,15 @@ export default function Complex({
       <Description>{description}</Description>
 
       {content}
+
       <ErrorText>{errormessage}</ErrorText>
       <MenuGroup>
         <LeftLore disabled={disabled} onClick={leftloreclick}>
           <Title>{leftloretext}</Title>
         </LeftLore>
-        <RightBtn disabled={disabled} onClick={rightbtnclick}>
-          {rightbtntext}
-        </RightBtn>
+          <RightBtn disabled={disabled} onClick={rightbtnclick}>
+            {rightbtntext}
+          </RightBtn>
       </MenuGroup>
     </Container>
   );
@@ -63,7 +64,7 @@ const Description = styled.p`
   white-space: pre;
 
   color: var(--black);
-  font-size: 16px;
+  font-size: 15px;
 `;
 
 const ErrorText = styled.p`
@@ -92,10 +93,16 @@ const RightBtn = styled.button`
 `;
 
 const LeftLore = styled.button`
+  height: 100%;
   outline: none;
+  background-color: transparent;
   border: none;
-
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  
   & p {
+    margin: 0;
     font-size: 12px;
     font-weight: 400;
     text-decoration: underline;

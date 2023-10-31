@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://api.ride.moda',
+  baseURL: 'http://localhost:8000',
 });
 
 export default api;

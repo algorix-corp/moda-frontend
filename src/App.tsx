@@ -9,6 +9,8 @@ import ErrorCatch from './components/ErrorBoundary.tsx';
 import {isMobileOnly} from 'react-device-detect';
 import ModaLogo from './assets/moda-logo.svg';
 import styled from 'styled-components';
+import RegisterVerify from './pages/Register/RegisterVerify.tsx';
+import LoginVerify from './pages/Login/LoginVerify.tsx';
 
 const router = createBrowserRouter([
   {
@@ -44,10 +46,20 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: (
-      <div>
-        <Login/>
-      </div>
+      <Login/>
     ),
+  },
+  {
+    path: '/register/verify',
+    element: (
+      <RegisterVerify/>
+    )
+  },
+  {
+    path: '/login/verify',
+    element: (
+      <LoginVerify/>
+    )
   },
   {
     path: '*',
