@@ -40,11 +40,11 @@ export default function VerifyCode({
         }
         if (value.length === 1) {
             const nextSibling = e.target.nextSibling as HTMLInputElement;
-            if (e.target.id !== '6') {
+            if (e.target.name !== '6') {
                 nextSibling.focus();
             }
         }
-        if (e.target.id === '6') {
+        if (e.target.name === '6') {
             // check if all inputs are filled
             let previous = e.target.previousSibling as HTMLInputElement;
             let allFilled = true;
@@ -55,12 +55,12 @@ export default function VerifyCode({
                 previous = previous.previousSibling as HTMLInputElement;
             }
             if (allFilled) {
-                const authcode = Number((document.querySelector('#1') as HTMLInputElement).value) * 100000 +
-                    Number((document.querySelector('#2') as HTMLInputElement).value) * 10000 +
-                    Number((document.querySelector('#3') as HTMLInputElement).value) * 1000 +
-                    Number((document.querySelector('#4') as HTMLInputElement).value) * 100 +
-                    Number((document.querySelector('#5') as HTMLInputElement).value) * 10 +
-                    Number((document.querySelector('#6') as HTMLInputElement).value);
+                const authcode = Number((document.querySelector('input[name="1"]') as HTMLInputElement).value) * 100000 +
+                  Number((document.querySelector('input[name="2"]') as HTMLInputElement).value) * 10000 +
+                  Number((document.querySelector('input[name="3"]') as HTMLInputElement).value) * 1000 +
+                  Number((document.querySelector('input[name="4"]') as HTMLInputElement).value) * 100 +
+                  Number((document.querySelector('input[name="5"]') as HTMLInputElement).value) * 10 +
+                  Number((document.querySelector('input[name="6"]') as HTMLInputElement).value);
                 rightbtnclick(authcode);
             }
         }
@@ -73,7 +73,7 @@ export default function VerifyCode({
                 // @ts-ignore
                 e.target.value = '';
                 // @ts-ignore
-                if (e.target.id !== '1') {
+                if (e.target.name !== '1') {
                     // @ts-ignore
                     const previousSibling = e.target.previousSibling as HTMLInputElement;
                     previousSibling.focus();
@@ -83,7 +83,7 @@ export default function VerifyCode({
             // @ts-ignore
             const previousSibling = e.target.previousSibling as HTMLInputElement;
             // @ts-ignore
-            if (e.target.id !== '1') {
+            if (e.target.name !== '1') {
                 previousSibling.value = '';
                 previousSibling.focus();
             }
@@ -95,17 +95,17 @@ export default function VerifyCode({
             description={description}
             content={(
                 <VerifyArea>
-                    <OneNumber id="1" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                    <OneNumber name="1" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
                                inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="2" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                    <OneNumber name="2" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
                                inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="3" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                    <OneNumber name="3" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
                                inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="4" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                    <OneNumber name="4" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
                                inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="5" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                    <OneNumber name="5" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
                                inputMode="numeric" autoComplete="one-time-code"/>
-                    <OneNumber id="6" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
+                    <OneNumber name="6" onChange={handleChange} onKeyDown={handleKeyDown} placeholder="0" type="text"
                                inputMode="numeric" autoComplete="one-time-code"/>
                 </VerifyArea>
             )}
@@ -114,12 +114,12 @@ export default function VerifyCode({
             rightbtntext={rightbtntext}
             leftloreclick={leftloreclick}
             rightbtnclick={() => {
-                const authcode = Number((document.querySelector('#1') as HTMLInputElement).value) * 100000 +
-                    Number((document.querySelector('#2') as HTMLInputElement).value) * 10000 +
-                    Number((document.querySelector('#3') as HTMLInputElement).value) * 1000 +
-                    Number((document.querySelector('#4') as HTMLInputElement).value) * 100 +
-                    Number((document.querySelector('#5') as HTMLInputElement).value) * 10 +
-                    Number((document.querySelector('#6') as HTMLInputElement).value);
+                const authcode = Number((document.querySelector('input[name="1"]') as HTMLInputElement).value) * 100000 +
+                    Number((document.querySelector('input[name="2"]') as HTMLInputElement).value) * 10000 +
+                    Number((document.querySelector('input[name="3"]') as HTMLInputElement).value) * 1000 +
+                    Number((document.querySelector('input[name="4"]') as HTMLInputElement).value) * 100 +
+                    Number((document.querySelector('input[name="5"]') as HTMLInputElement).value) * 10 +
+                    Number((document.querySelector('input[name="6"]') as HTMLInputElement).value);
                 rightbtnclick(authcode);
             }}
             disabled={loading}

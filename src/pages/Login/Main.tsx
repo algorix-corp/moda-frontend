@@ -1,6 +1,6 @@
 import {styled} from 'styled-components';
 import Complex from '../../components/Complex';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import api from '../../api.ts';
 import {useNavigate, useSearchParams} from 'react-router-dom';
 
@@ -38,6 +38,11 @@ export default function Login() {
         setErrormsg('서버에서 오류가 발생했어요.');
       });
   };
+  useEffect(() => {
+    if (phone !== null) {
+      setNumber(phone);
+    }
+  }, [phone])
   return (
     <Complex
       title="모다 시작하기"
@@ -46,7 +51,7 @@ export default function Login() {
         <Input
           placeholder="전화번호를 입력하세요."
           type="tel"
-          value={phone ?? number}
+          value={number}
           autoCapitalize="off"
           autoComplete="off"
           autoCorrect="off"
