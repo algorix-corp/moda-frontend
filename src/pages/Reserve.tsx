@@ -1,4 +1,4 @@
-import ReserveSuccess from "../components/Preview/ReserveSuccess.tsx";
+import ReserveSuccess from "../components/Reservation/ReserveSuccess.tsx";
 import ReservationSummary from "../components/Preview/ReservationSummary.tsx";
 
 export default function Reserve() {

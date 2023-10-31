@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import {DRTSummary} from "../../dummy.ts";
 
 export default function ReservationSummary() {
   const navigate = useNavigate();
   const onReserveClick = () => {
-    navigate('/reservation');
+    navigate('/reservation', {replace: true});
   }
   return (
     <Container>
@@ -12,12 +13,12 @@ export default function ReservationSummary() {
         <SingleArea>
           <TimeSavedArea>
             <SmallText>예상 소요 시간</SmallText>
-            <TimeSaved>3000분 단축</TimeSaved>
+            <TimeSaved>{DRTSummary.shortenedMinutes}분 단축</TimeSaved>
           </TimeSavedArea>
           <NumberArea>
-            <NumberText>1</NumberText>
+            <NumberText>{DRTSummary.hourToTravel}</NumberText>
             <TimeText>시간</TimeText>
-            <NumberText>30</NumberText>
+            <NumberText>{ DRTSummary.minuteToTravel }</NumberText>
             <TimeText>분</TimeText>
           </NumberArea>
         </SingleArea>
@@ -26,7 +27,7 @@ export default function ReservationSummary() {
             <SmallText>총 DRT 비용</SmallText>
           </TimeSavedArea>
           <NumberArea>
-            <NumberText>6,450</NumberText>
+            <NumberText>{DRTSummary.fee.toLocaleString('ko-KR')}</NumberText>
             <TimeText>원</TimeText>
           </NumberArea>
         </SingleArea>

@@ -14,10 +14,13 @@ export default function LoginVerify() {
   const rightbtnclick = () => {
     navigate('/login', { replace: true });
   };
+  const insertDash = (number: string) => {
+    return number.slice(0, 3) + '-' + number.slice(3, 7) + '-' + number.slice(7, 11)
+  }
   return (
     <VerifyCode
       title="기존 계정으로 로그인"
-      description={`010-1234-5678로 보내진\n6자리 인증 번호를 입력하여 계속 진행하세요.`}
+      description={`${insertDash(phone)}로 보내진\n6자리 인증 번호를 입력하여 계속 진행하세요.`}
       leftloretext="전화번호를 잘못 입력했어요."
       rightbtntext="로그인하기"
       leftloreclick={leftloreclick}

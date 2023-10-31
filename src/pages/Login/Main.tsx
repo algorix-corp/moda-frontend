@@ -58,7 +58,7 @@ export default function Login() {
           onKeyDown={(e) => {
             if (!/[0-9]/.test(e.key) && e.keyCode !== 8) {
               e.preventDefault();
-            }ㄴ
+            }
           }}
           onChange={(e) => setNumber(e.target.value)}
           disabled={loading}
@@ -68,7 +68,7 @@ export default function Login() {
       leftloretext="스킵"
       rightbtntext="계속하기"
       leftloreclick={() =>
-        navigate(`/login/verify?phone=${number}`, { replace: true })
+        navigate(`/register/verify?phone=${number}`, { replace: true })
       }
       rightbtnclick={handleContinue}
       disabled={loading}

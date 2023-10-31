@@ -1,21 +1,17 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
-import { pathAtom } from '../states/atom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Navigator() {
-  const [path, setPath] = useRecoilState(pathAtom);
   const navigate = useNavigate();
-
+  const location = useLocation()
   return (
     <div>
       <Container>
         <Button
           onClick={() => {
             navigate('/', {replace: true});
-            setPath('/');
           }}
-          $highlighted={path === '/'}
+          $highlighted={location.pathname === '/'}
         >
           <div>
             <Icon width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -29,7 +25,7 @@ export default function Navigator() {
             <Text>메인</Text>
           </div>
         </Button>
-        <Button $highlighted={false}>
+        <Button $highlighted={location.pathname==='/settings'}>
           <div>
             <Icon width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path

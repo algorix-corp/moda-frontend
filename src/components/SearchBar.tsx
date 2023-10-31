@@ -1,22 +1,22 @@
 import {styled} from 'styled-components';
 import SearchSVG from '../assets/18-search.svg';
 import {useRecoilState} from 'recoil';
-import {departureAtom, destinationAtom, Location, pathAtom, queriesAtom, selectedAtom, tokenAtom} from '../states/atom';
+import {departureAtom, destinationAtom, Location, queriesAtom, selectedAtom, tokenAtom} from '../states/atom';
 import {useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {places} from '../dummy.ts';
 
 export default function SearchBar() {
   const [queries, setQueries] = useRecoilState(queriesAtom);
   const [departure, setDeparture] = useRecoilState(departureAtom);
   const [destination, setDestination] = useRecoilState(destinationAtom);
-  const [path, setPath] = useRecoilState(pathAtom);
+  const location = useLocation();
   const [selected, setSelected] = useRecoilState(selectedAtom);
   const navigate = useNavigate();
   //const [token] = useRecoilState(tokenAtom);
 
   useEffect(() => {
-    if (path === '/') {
+    if (location.pathname === '/') {
       setDeparture(undefined);
       setDestination(undefined);
 
@@ -26,12 +26,11 @@ export default function SearchBar() {
       document.querySelector('.destination')!.value = null;
       setSelected(0);
     } else if (
-      path === '/search' &&
+      location.pathname === '/search' &&
       departure !== undefined &&
       destination !== undefined
     ) {
       navigate('/preview', {replace: true});
-      setPath('/preview');
     }
     /* ===========DISABLE ONCE LOGIN DONE===========
     if (token===undefined) {
@@ -42,15 +41,14 @@ export default function SearchBar() {
     departure,
     destination,
     navigate,
-    path,
+    location,
     setDeparture,
     setDestination,
-    setPath,
     setSelected,
   ]);
 
   useEffect(() => {
-    if (path !== '/' && selected === 0) {
+    if (location.pathname !== '/' && selected === 0) {
       if (departure === undefined) {
         setDeparture(Location.CURRENT);
 
@@ -65,7 +63,7 @@ export default function SearchBar() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [departure, path]);
+  }, [departure, location]);
 
   useEffect(() => {
     if (selected === 0) {
@@ -89,10 +87,10 @@ export default function SearchBar() {
 
   return (
     <div>
-      <Container $isMain={path === '/'}>
+      <Container $isMain={location.pathname === '/'}>
         <div>
-          <SearchIcon src={SearchSVG} $isMain={path === '/'}/>
-          {path === '/' ? null : (
+          <SearchIcon src={SearchSVG} $isMain={location.pathname === '/'}/>
+          {location.pathname === '/' ? null : (
             <ToolTip $selected={selected === 1}>출발지</ToolTip>
           )}
           <Input
@@ -102,7 +100,7 @@ export default function SearchBar() {
             autoComplete="off"
             autoCorrect="off"
             className="departure"
-            $isMain={path === '/'}
+            $isMain={location.pathname === '/'}
             $selected={selected === 1}
             onChange={(e) =>
               setQueries({
@@ -121,17 +119,17 @@ export default function SearchBar() {
               setDeparture(undefined);
 
               navigate('/search', {replace: true});
-              setPath('/search');
 
               setSelected(1);
             }}
             onBlur={() => {
-              if (path !== '/') {
+              if (location.pathname !== '/') {
                 setSelected(0);
                 setQueries({
                   ...queries,
                   destination: '',
                 });
+                return;
               }
             }}
           ></Input>
@@ -145,7 +143,7 @@ export default function SearchBar() {
             autoComplete="off"
             autoCorrect="off"
             className="destination"
-            $isMain={path === '/'}
+            $isMain={location.pathname === '/'}
             $selected={selected === 2}
             onChange={(e) =>
               setQueries({
@@ -154,7 +152,7 @@ export default function SearchBar() {
               })
             }
             onFocus={() => {
-              if (path === '/preview') {
+              if (location.pathname === '/preview') {
                 setQueries({
                   ...queries,
                   destination: '',
@@ -164,7 +162,6 @@ export default function SearchBar() {
                 document.querySelector('.destination')!.value = '';
 
                 navigate('/search', {replace: true});
-                setPath('/search');
               }
 
               setSelected(2);
@@ -179,7 +176,7 @@ export default function SearchBar() {
           ></Input>
         </div>
       </Container>
-      <MockContainer $isMain={path === '/'}/>
+      <MockContainer $isMain={location.pathname === '/'}/>
     </div>
   );
 }

@@ -12,10 +12,22 @@ import styled from 'styled-components';
 import RegisterVerify from './pages/Register/RegisterVerify.tsx';
 import LoginVerify from './pages/Login/LoginVerify.tsx';
 import Reserve from "./pages/Reserve.tsx";
+import RegisterName from "./pages/Register/RegisterName.tsx";
+import RegisterCard from "./pages/Register/RegisterCard.tsx";
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: (
+      <div>
+        <SearchBar/>
+        <Landing/>
+        <Navigator/>
+      </div>
+    ),
+  },
+  {
+    path: '/settings',
     element: (
       <div>
         <SearchBar/>
@@ -59,12 +71,20 @@ const router = createBrowserRouter([
     element: <Login/>,
   },
   {
+    path: '/login/verify',
+    element: <LoginVerify/>,
+  },
+  {
     path: '/register/verify',
     element: <RegisterVerify/>,
   },
   {
-    path: '/login/verify',
-    element: <LoginVerify/>,
+    path: '/register/name',
+    element: <RegisterName/>,
+  },
+  {
+    path: '/register/card',
+    element: <RegisterCard/>,
   },
   {
     path: '*',

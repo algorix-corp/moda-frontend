@@ -31,11 +31,6 @@ export const destinationAtom = atom<number | undefined>({
   default: undefined,
 });
 
-export const pathAtom = atom<string>({
-  key: 'path',
-  default: window.location.pathname,
-});
-
 export const scheduleAtom = atom<
   {
     id: string;

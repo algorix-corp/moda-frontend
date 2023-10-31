@@ -53,3 +53,10 @@ export const places: {
     address: '서울특별시 중구 서소문로 110',
   },
 ];
+
+export const DRTSummary = {
+  shortenedMinutes: 300,
+  hourToTravel: 2,
+  minuteToTravel: 30,
+  fee: 100000
+}

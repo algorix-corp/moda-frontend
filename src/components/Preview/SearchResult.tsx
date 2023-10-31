@@ -4,7 +4,6 @@ export default function SearchResult() {
   return (
     <Container>
       <Text>모다가 <span>최적</span>의 경로를 찾았어요.</Text>
-      샌즈
     </Container>
   )
 }
