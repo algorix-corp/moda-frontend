@@ -1,9 +1,17 @@
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
 
 export default function Navigator() {
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
+  useEffect(() => {
+    /* ===========DISABLE ONCE LOGIN DONE===========
+    if (token===undefined) {
+      navigate('/login');
+    }
+    */
+  }, []);
   return (
     <div>
       <Container>
@@ -25,7 +33,9 @@ export default function Navigator() {
             <Text>메인</Text>
           </div>
         </Button>
-        <Button $highlighted={location.pathname==='/settings'}>
+        <Button onClick={() => {
+          navigate('/settings', {replace: true})
+        }} $highlighted={location.pathname==='/settings'}>
           <div>
             <Icon width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path

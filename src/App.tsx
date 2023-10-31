@@ -14,6 +14,9 @@ import LoginVerify from './pages/Login/LoginVerify.tsx';
 import Reserve from "./pages/Reserve.tsx";
 import RegisterName from "./pages/Register/RegisterName.tsx";
 import RegisterCard from "./pages/Register/RegisterCard.tsx";
+import Settings from "./pages/Settings.tsx";
+import TOS from "./pages/TOS.tsx";
+import Privacy from "./pages/Privacy.tsx";
 
 const router = createBrowserRouter([
   {
@@ -30,9 +33,26 @@ const router = createBrowserRouter([
     path: '/settings',
     element: (
       <div>
-        <SearchBar/>
-        <Landing/>
+        <Settings/>
         <Navigator/>
+      </div>
+    ),
+  },
+  {
+    path: '/tos',
+    element: (
+      <div>
+        <TOS/>
+        <Navigator/>
+      </div>
+    ),
+  },
+  {
+    path: '/privacy',
+    element: (
+      <div>
+        <TOS/>
+        <Privacy/>
       </div>
     ),
   },

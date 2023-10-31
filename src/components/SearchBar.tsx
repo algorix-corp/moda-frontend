@@ -1,10 +1,10 @@
-import {styled} from 'styled-components';
+import { styled } from 'styled-components';
 import SearchSVG from '../assets/18-search.svg';
-import {useRecoilState} from 'recoil';
-import {departureAtom, destinationAtom, Location, queriesAtom, selectedAtom, tokenAtom} from '../states/atom';
-import {useEffect} from 'react';
+import { useRecoilState } from 'recoil';
+import { departureAtom, destinationAtom, Location, queriesAtom, selectedAtom } from '../states/atom';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {places} from '../dummy.ts';
+import { places } from '../dummy.ts';
 
 export default function SearchBar() {
   const [queries, setQueries] = useRecoilState(queriesAtom);
@@ -30,13 +30,8 @@ export default function SearchBar() {
       departure !== undefined &&
       destination !== undefined
     ) {
-      navigate('/preview', {replace: true});
+      navigate('/preview', { replace: true });
     }
-    /* ===========DISABLE ONCE LOGIN DONE===========
-    if (token===undefined) {
-      navigate('/login');
-    }
-    */
   }, [
     departure,
     destination,
@@ -87,12 +82,12 @@ export default function SearchBar() {
 
   return (
     <div>
-      <Container $isMain={location.pathname === '/'}>
+      <Container $isMain={ location.pathname === '/' }>
         <div>
-          <SearchIcon src={SearchSVG} $isMain={location.pathname === '/'}/>
-          {location.pathname === '/' ? null : (
-            <ToolTip $selected={selected === 1}>출발지</ToolTip>
-          )}
+          <SearchIcon src={ SearchSVG } $isMain={ location.pathname === '/' }/>
+          { location.pathname === '/' ? null : (
+            <ToolTip $selected={ selected === 1 }>출발지</ToolTip>
+          ) }
           <Input
             placeholder="오늘은 어디를 가고 싶으신가요?"
             type="search"
@@ -100,15 +95,15 @@ export default function SearchBar() {
             autoComplete="off"
             autoCorrect="off"
             className="departure"
-            $isMain={location.pathname === '/'}
-            $selected={selected === 1}
-            onChange={(e) =>
+            $isMain={ location.pathname === '/' }
+            $selected={ selected === 1 }
+            onChange={ (e) =>
               setQueries({
                 ...queries,
                 departure: e.target.value,
               })
             }
-            onFocus={() => {
+            onFocus={ () => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               document.querySelector('.departure')!.value = '';
@@ -118,11 +113,11 @@ export default function SearchBar() {
               });
               setDeparture(undefined);
 
-              navigate('/search', {replace: true});
+              navigate('/search', { replace: true });
 
               setSelected(1);
-            }}
-            onBlur={() => {
+            } }
+            onBlur={ () => {
               if (location.pathname !== '/') {
                 setSelected(0);
                 setQueries({
@@ -131,11 +126,11 @@ export default function SearchBar() {
                 });
                 return;
               }
-            }}
+            } }
           ></Input>
         </div>
         <div>
-          <ToolTip $selected={selected === 2}>목적지</ToolTip>
+          <ToolTip $selected={ selected === 2 }>목적지</ToolTip>
           <Input
             placeholder="목적지를 입력하세요."
             type="search"
@@ -143,15 +138,15 @@ export default function SearchBar() {
             autoComplete="off"
             autoCorrect="off"
             className="destination"
-            $isMain={location.pathname === '/'}
-            $selected={selected === 2}
-            onChange={(e) =>
+            $isMain={ location.pathname === '/' }
+            $selected={ selected === 2 }
+            onChange={ (e) =>
               setQueries({
                 ...queries,
                 destination: e.target.value,
               })
             }
-            onFocus={() => {
+            onFocus={ () => {
               if (location.pathname === '/preview') {
                 setQueries({
                   ...queries,
@@ -161,22 +156,22 @@ export default function SearchBar() {
                 // @ts-ignore
                 document.querySelector('.destination')!.value = '';
 
-                navigate('/search', {replace: true});
+                navigate('/search', { replace: true });
               }
 
               setSelected(2);
-            }}
-            onBlur={() => {
+            } }
+            onBlur={ () => {
               setSelected(0);
               setQueries({
                 ...queries,
                 destination: '',
               });
-            }}
+            } }
           ></Input>
         </div>
       </Container>
-      <MockContainer $isMain={location.pathname === '/'}/>
+      <MockContainer $isMain={ location.pathname === '/' }/>
     </div>
   );
 }
@@ -185,7 +180,7 @@ const MockContainer = styled.div<{
   $isMain: boolean;
 }>`
   width: 100vw;
-  height: ${(props) => (props.$isMain ? 50 : 100)}px;
+  height: ${ (props) => (props.$isMain ? 50 : 100) }px;
 
   transition: height 150ms ease;
 `;
@@ -195,7 +190,7 @@ const Container = styled.div<{
 }>`
   position: fixed;
   width: calc(100vw - 40px);
-  height: ${(props) => (props.$isMain ? 50 : 100)}px;
+  height: ${ (props) => (props.$isMain ? 50 : 100) }px;
   left: 20px;
 
   display: flex;
@@ -232,7 +227,7 @@ const SearchIcon = styled.img<{
   top: 50%;
   left: 20px;
 
-  transform: translate(${(props) => (props.$isMain ? 0 : -58)}px, -50%);
+  transform: translate(${ (props) => (props.$isMain ? 0 : -58) }px, -50%);
 
   transition: transform 150ms ease;
 `;
@@ -246,8 +241,8 @@ const Input = styled.input<{
   width: calc(100% - 40px);
   height: 50px;
 
-  padding-top: ${(props) => (props.$selected && !props.$isMain ? 17 : 0)}px;
-  padding-left: ${(props) => (props.$isMain ? 28 : 0)}px;
+  padding-top: ${ (props) => (props.$selected && !props.$isMain ? 17 : 0) }px;
+  padding-left: ${ (props) => (props.$isMain ? 28 : 0) }px;
 
   color: var(--black);
   background-color: var(--white) 00;
@@ -261,7 +256,7 @@ const Input = styled.input<{
   &::placeholder {
     color: var(--gray400);
 
-    opacity: ${(props) => (props.$selected ? 0 : 1)};
+    opacity: ${ (props) => (props.$selected ? 0 : 1) };
     transition: opacity 200ms ease;
   }
 `;
@@ -276,6 +271,6 @@ const ToolTip = styled.p<{
   color: var(--gray400);
   font-size: 12px;
 
-  opacity: ${(props) => (props.$selected ? 1 : 0)};
+  opacity: ${ (props) => (props.$selected ? 1 : 0) };
   transition: opacity 200ms ease;
 `;
