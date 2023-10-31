@@ -14,10 +14,10 @@
 }
 
 :root {
-  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto,
-    'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR',
-    'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    sans-serif;
+  font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo',
+    'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', sans-serif;
 
   --primary: #1a75ff;
   --primarySub: #4d93ff;
@@ -42,4 +42,8 @@ body {
   touch-action: none;
   -ms-touch-action: none;
   height: 100vh;
+}
+
+input::-ms-clear {
+  display: none;
 }

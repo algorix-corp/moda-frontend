@@ -79,7 +79,7 @@ export default function PlaceList() {
               setLastObjInQueue(index);
             }}
             onTouchEnd={() => {
-              if(isSwiped) return;
+              if (isSwiped) return;
               if (selected === 1) {
                 setDeparture(place.id);
                 blurObject('departure');
@@ -121,7 +121,7 @@ export default function PlaceList() {
               setLastObjInQueue(index + saved.length);
             }}
             onTouchEnd={() => {
-              if(isSwiped) return;
+              if (isSwiped) return;
               if (selected === 1) {
                 setDeparture(place.id);
                 blurObject('departure');
@@ -129,7 +129,6 @@ export default function PlaceList() {
                 setDestination(place.id);
                 blurObject('destination');
               }
-
             }}
           >
             <ContentsGroup

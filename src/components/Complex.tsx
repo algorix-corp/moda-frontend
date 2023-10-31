@@ -1,18 +1,18 @@
 import styled from 'styled-components';
 
 export default function Complex({
-                                  title,
-                                  description,
-                                  content,
-                                  errormessage,
-                                  leftloretext,
-                                  rightbtntext,
-                                  leftloreclick,
-                                  rightbtnclick,
-                                  disabled,
-                                }: {
+  title,
+  description,
+  content,
+  errormessage,
+  leftloretext,
+  rightbtntext,
+  leftloreclick,
+  rightbtnclick,
+  disabled,
+}: {
   title: string;
-  description: JSX.Element;
+  description: string;
   content: JSX.Element;
   leftloretext: string;
   rightbtntext: string;
@@ -21,18 +21,20 @@ export default function Complex({
   rightbtnclick: () => void;
   disabled: boolean;
 }) {
-
   return (
     <Container>
-      <Text>{title}</Text>
-
-      <TwoRowsGroup>{description}</TwoRowsGroup>
+      <Title>{title}</Title>
+      <Description>{description}</Description>
 
       {content}
       <ErrorText>{errormessage}</ErrorText>
       <MenuGroup>
-        <LeftLore disabled={disabled} onClick={leftloreclick}><Text>{leftloretext}</Text></LeftLore>
-        <RightBtn disabled={disabled} onClick={rightbtnclick}>{rightbtntext}</RightBtn>
+        <LeftLore disabled={disabled} onClick={leftloreclick}>
+          <Title>{leftloretext}</Title>
+        </LeftLore>
+        <RightBtn disabled={disabled} onClick={rightbtnclick}>
+          {rightbtntext}
+        </RightBtn>
       </MenuGroup>
     </Container>
   );
@@ -41,26 +43,33 @@ export default function Complex({
 const Container = styled.div`
   display: grid;
   width: 100vw;
-  padding: 20px;
+  padding: 0 20px 0 20px;
   height: 100vh;
   grid-template-rows: auto auto auto auto auto 1fr;
 `;
 
-const Text = styled.p`
+const Title = styled.p`
+  margin-top: 40px;
+
   color: var(--black);
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
   white-space: normal;
+`;
 
-  & span {
-    color: var(--primary);
-  }
+const Description = styled.p`
+  margin-top: 10px;
+
+  white-space: pre;
+
+  color: var(--black);
+  font-size: 16px;
 `;
 
 const ErrorText = styled.p`
   margin-top: 10px;
   color: var(--red);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 400;
   white-space: normal;
 
@@ -69,27 +78,16 @@ const ErrorText = styled.p`
   }
 `;
 
-const TwoRowsGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0;
-  width: 60%;
-
-  & span {
-    font-size: 14px;
-    font-weight: 400;
-  }
-`;
-
 const RightBtn = styled.button`
   color: var(--white);
   background-color: var(--black);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   outline: none;
   border: none;
-  padding: 10px 20px;
-  border-radius: 20px;
+  padding: 12px 22px;
+  margin-top: 15px;
+  border-radius: 22px;
   width: fit-content;
 `;
 
