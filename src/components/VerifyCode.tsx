@@ -1,5 +1,6 @@
 import Complex from './Complex.tsx';
 import styled from 'styled-components';
+import React from "react";
 
 export default function VerifyCode({
   title,

@@ -11,15 +11,16 @@ import ModaLogo from './assets/moda-logo.svg';
 import styled from 'styled-components';
 import RegisterVerify from './pages/Register/RegisterVerify.tsx';
 import LoginVerify from './pages/Login/LoginVerify.tsx';
+import Reserve from "./pages/Reserve.tsx";
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
       <div>
-        <SearchBar />
-        <Landing />
-        <Navigator />
+        <SearchBar/>
+        <Landing/>
+        <Navigator/>
       </div>
     ),
   },
@@ -27,9 +28,9 @@ const router = createBrowserRouter([
     path: '/search',
     element: (
       <div>
-        <SearchBar />
-        <Search />
-        <Navigator />
+        <SearchBar/>
+        <Search/>
+        <Navigator/>
       </div>
     ),
   },
@@ -37,41 +38,51 @@ const router = createBrowserRouter([
     path: '/preview',
     element: (
       <div>
-        <SearchBar />
-        <Preview />
-        <Navigator />
+        <SearchBar/>
+        <Preview/>
+        <Navigator/>
+      </div>
+    ),
+  },
+  {
+    path: '/reservation',
+    element: (
+      <div>
+        <SearchBar/>
+        <Reserve/>
+        <Navigator/>
       </div>
     ),
   },
   {
     path: '/login',
-    element: <Login />,
+    element: <Login/>,
   },
   {
     path: '/register/verify',
-    element: <RegisterVerify />,
+    element: <RegisterVerify/>,
   },
   {
     path: '/login/verify',
-    element: <LoginVerify />,
+    element: <LoginVerify/>,
   },
   {
     path: '*',
-    element: <ErrorCatch />,
+    element: <ErrorCatch/>,
   },
 ]);
 
 export default function App() {
   if (isMobileOnly) {
-    return <RouterProvider router={router} />;
+    return <RouterProvider router={ router }/>;
   } else {
     return (
       <Container>
         <LogoArea>
-          <Logo src={ModaLogo} alt="모다" />
+          <Logo src={ ModaLogo } alt="모다"/>
           <Title>
             버스의 가격,
-            <br />
+            <br/>
             택시의 편안함.
           </Title>
         </LogoArea>
