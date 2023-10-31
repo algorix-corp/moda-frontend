@@ -47,6 +47,11 @@ export default function Login() {
           autoCapitalize="off"
           autoComplete="off"
           autoCorrect="off"
+          onKeyDown={(e) => {
+            if (!/[0-9]/.test(e.key) && e.keyCode !== 8) {
+              e.preventDefault();
+            }
+          }}
           onChange={(e) => setNumber(e.target.value)}
           disabled={loading}
         />
