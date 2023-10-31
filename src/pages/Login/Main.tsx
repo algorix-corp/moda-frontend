@@ -39,7 +39,7 @@ export default function Login() {
   return (
     <Complex
       title="모다 시작하기"
-      description={`모다 서비스를 이용하기 위해\n먼저 전화번호를 입력해주세요.`}
+      description={`모다 서비스를 이용하기 위해\n전화번호를 입력해주세요.`}
       content={
         <Input
           placeholder="전화번호를 입력하세요."
