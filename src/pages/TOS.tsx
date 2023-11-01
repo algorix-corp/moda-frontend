@@ -300,13 +300,15 @@ const Title = styled.h1`
 `;
 
 const Text = styled.p`
+  width: 85vw;
+  height: 85vh;
   margin: 20px 0;
   font-size: 14px;
   font-weight: 400;
 `;
 
 const Container = styled.div`
-  overflow-y: scroll;
+  overflow: scroll;
   margin: 20px;
   & a {
     margin-right: 10px;

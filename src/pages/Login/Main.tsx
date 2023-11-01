@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import Complex from '../../components/Complex';
 import { useEffect, useState } from 'react';
 import api from '../../api.ts';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function Login() {
   const [number, setNumber] = useState<string>('');
@@ -54,6 +54,7 @@ export default function Login() {
       title="모다 시작하기"
       description={ `모다 서비스를 이용하기 위해\n전화번호를 입력해주세요.` }
       content={
+      <>
         <Input
           placeholder="전화번호를 입력하세요."
           type="tel"
@@ -69,6 +70,8 @@ export default function Login() {
           onChange={ (e) => setNumber(e.target.value) }
           disabled={ loading }
         />
+        <Warning>By using this service, you consent to Algorix LLC's<br/><Link to="/tos">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>.</Warning>
+        </>
       }
       errormessage={ errormsg }
       leftloretext=""
@@ -93,3 +96,13 @@ const Input = styled.input`
 
   margin-top: 30px;
 `;
+
+const Warning = styled.p`
+  color: var(--gray400);
+  margin: 5px 0;
+  font-size: 10px;
+  
+  & a {
+    color: var(--gray400);
+  }
+  `;
