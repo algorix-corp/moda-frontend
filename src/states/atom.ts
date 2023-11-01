@@ -1,19 +1,12 @@
 import { atom } from 'recoil';
-import { saved, schedules } from '../dummy.ts';
 
 export enum Location {
   CURRENT = -1,
 }
 
-export const queriesAtom = atom<{
-  departure: string;
-  destination: string;
-}>({
+export const queriesAtom = atom<string | undefined>({
   key: 'queries',
-  default: {
-    departure: '',
-    destination: '',
-  },
+  default: undefined,
 });
 
 export const selectedAtom = atom<number>({
@@ -31,30 +24,33 @@ export const destinationAtom = atom<number | undefined>({
   default: undefined,
 });
 
-export const scheduleAtom = atom<
-  {
-    id: string;
-    address: string;
-    time: string;
-  }[]
->({
-  key: 'schedule',
-  default: schedules,
-});
-
-export const savedAtom = atom<number[]>({
-  key: 'saved',
-  default: saved,
-});
-
-interface Token {
-  id: string;
-  phone_number: string;
-  username: string;
-  card_number: string;
+interface Place {
+  id: number;
+  name: string;
+  address: string;
 }
 
-export const tokenAtom = atom<Token|undefined>({
+export const placesAtom = atom<Place[]>({
+  key: 'places',
+  default: [],
+});
+
+export const savedAtom = atom<Place[]>({
+  key: 'saved',
+  default: [],
+});
+
+export const tokenAtom = atom<string>({
   key: 'token',
   default: undefined
+})
+
+export const departureNameAtom = atom<string>({
+  key: 'departureName',
+  default: ''
+})
+
+export const destinationNameAtom = atom<string>({
+  key: 'destinationName',
+  default: ''
 })

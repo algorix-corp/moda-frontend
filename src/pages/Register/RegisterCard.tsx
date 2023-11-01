@@ -1,13 +1,13 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Complex from "../../components/Complex.tsx";
+import Complex from "../../components/Complex";
 import { styled } from "styled-components";
 import { useState } from "react";
+import api from "../../api.ts";
 
 export default function RegisterCard() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const phone = params.get('phone') ?? '';
-  const auth = params.get('auth') ?? '';
   const name = params.get('name') ?? '';
   const [card, setCard] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,10 +17,23 @@ export default function RegisterCard() {
   const dummy = () => {
   }
   const next = () => {
-    // TODO: api
+    setLoading(true)
+    const body = {
+      "phone_number": phone,
+      "username": name,
+      "card_number": card,
+      "notification": true
+    }
+    api.post('/user', body).then(() => {
+      setLoading(false)
+      navigate('/login/verify?phone=' + phone, { replace: true })
+    }).catch(() => {
+      setLoading(false)
+      setErrormsg('서버에서 오류가 발생했어요.')
+    })
   }
   return (
-    <Complex title={ '새로운 계정 생성하기' } description={ '마지막으로 DRT 결제에 사용할\n교통카드 번호를 입력해주세요.' } content={
+    <Complex title={ '새로운 계정 생성하기' } description={ 'DRT 결제에 사용할\n교통카드 번호를 입력해주세요.' } content={
       <Input
         placeholder="카드번호를 입력하세요."
         type="text"

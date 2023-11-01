@@ -1,22 +1,22 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import SearchBar from './components/SearchBar.tsx';
-import Landing from './pages/Landing.tsx';
-import Navigator from './components/Navigator.tsx';
-import Search from './pages/Search.tsx';
-import Preview from './pages/Preview.tsx';
-import Login from './pages/Login/Main.tsx';
-import ErrorCatch from './components/ErrorBoundary.tsx';
+import SearchBar from './components/SearchBar';
+import Landing from './pages/Landing';
+import Navigator from './components/Navigator';
+import Search from './pages/Search';
+import Preview from './pages/Preview';
+import Login from './pages/Login/Main';
+import ErrorCatch from './components/ErrorBoundary';
 import { isMobileOnly } from 'react-device-detect';
 import ModaLogo from './assets/moda-logo.svg';
 import styled from 'styled-components';
-import RegisterVerify from './pages/Register/RegisterVerify.tsx';
-import LoginVerify from './pages/Login/LoginVerify.tsx';
-import Reserve from "./pages/Reserve.tsx";
-import RegisterName from "./pages/Register/RegisterName.tsx";
-import RegisterCard from "./pages/Register/RegisterCard.tsx";
-import Settings from "./pages/Settings.tsx";
-import TOS from "./pages/TOS.tsx";
-import Privacy from "./pages/Privacy.tsx";
+import LoginVerify from './pages/Login/LoginVerify';
+import Reserve from "./pages/Reserve";
+import RegisterName from "./pages/Register/RegisterName";
+import RegisterCard from "./pages/Register/RegisterCard";
+import Settings from "./pages/Settings";
+import TOS from "./pages/TOS";
+import Privacy from "./pages/Privacy";
+import NoResult from "./components/Preview/NoResult.tsx";
 
 const router = createBrowserRouter([
   {
@@ -93,6 +93,16 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: '/preview/noresult',
+    element: (
+      <div>
+        <SearchBar/>
+        <NoResult/>
+        <Navigator/>
+      </div>
+    ),
+  },
+  {
     path: '/reservation',
     element: (
       <div>
@@ -109,10 +119,6 @@ const router = createBrowserRouter([
   {
     path: '/login/verify',
     element: <LoginVerify/>,
-  },
-  {
-    path: '/register/verify',
-    element: <RegisterVerify/>,
   },
   {
     path: '/register/name',

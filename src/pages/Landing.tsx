@@ -1,16 +1,24 @@
 import styled from 'styled-components';
 import { useSwipeable } from 'react-swipeable';
-import { useState } from 'react';
-import { schedules } from '../dummy.ts';
+import { useEffect, useState } from 'react';
 import CancelSVG from '../assets/24-cancel.svg';
 import CircleWarningSVG from '../assets/65-circle-warning.svg';
-import {Link} from 'react-router-dom';
+import api from "../api.ts";
+import { tokenAtom } from "../states/atom.ts";
+import { useRecoilState } from "recoil";
+
+interface Schedule {
+    id: string;
+    address: string;
+    time: string;
+}
 
 export default function Landing() {
     const [lastObjInQueue, setLastObjInQueue] = useState<null | number>(null);
     const [lastObj, setLastObj] = useState<null | number>(null);
     const [isSwiped, setIsSwiped] = useState<boolean>(false);
-
+    const [schedules, setSchedule] = useState<Schedule[]>([]);
+    const [token] = useRecoilState(tokenAtom);
     const handlers = useSwipeable({
         onSwipedLeft: () => {
             setIsSwiped(true);
@@ -20,6 +28,13 @@ export default function Landing() {
         onSwipedRight: () => setIsSwiped(false),
         onTap: () => setIsSwiped(false),
     });
+
+    useEffect(() => {
+        api.get(`/user/${ token }/reservations`).then((r) => {
+            setSchedule(r.data.reservations);
+        })
+    }, [token, setSchedule])
+
 
     return (
         <Container>
@@ -56,7 +71,6 @@ export default function Landing() {
                     ))
                 )}
             </ScheduleGroup>
-            <Link to={'/login'} replace>로그인테스트</Link>
         </Container>
     );
 }

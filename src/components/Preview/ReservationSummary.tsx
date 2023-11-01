@@ -1,10 +1,15 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {DRTSummary} from "../../dummy.ts";
 
 export default function ReservationSummary() {
   const navigate = useNavigate();
+  const location = useLocation();
   const onReserveClick = () => {
+    if(location.pathname === '/reservation') {
+      navigate('/', {replace: true});
+      return;
+    }
     navigate('/reservation', {replace: true});
   }
   return (
@@ -32,7 +37,11 @@ export default function ReservationSummary() {
           </NumberArea>
         </SingleArea>
       </TimeArea>
-      <Button onClick={onReserveClick}>DRT N개 예약하기</Button>
+      <Button onClick={onReserveClick} style={location.pathname === '/reservation' ? { backgroundColor: "var(--black)"} : {}}>{
+        location.pathname === '/preview' ? 'DRT 예약하기' : (
+          location.pathname === '/reservation' ? '메인 화면으로 돌아가기' : '예약 다시 시도하기'
+        )
+      }</Button>
     </Container>
   )
 }

@@ -7,14 +7,16 @@ import { tokenAtom } from "../states/atom.ts";
 export default function Navigator() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [token] = useRecoilState(tokenAtom)
+  const [token, setToken] = useRecoilState(tokenAtom)
   useEffect(() => {
-    /* ===========DISABLE ONCE LOGIN DONE===========
     if (token===undefined) {
-      navigate('/login');
+      if(localStorage.getItem('token')!==null) {
+        setToken(localStorage.getItem('token')!)
+        return;
+      }
+      navigate('/login', {replace: true});
     }
-    */
-  }, [token]);
+  }, [navigate, token, setToken]);
   return (
     <div>
       <Container>

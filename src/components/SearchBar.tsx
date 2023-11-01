@@ -1,19 +1,45 @@
 import { styled } from 'styled-components';
 import SearchSVG from '../assets/18-search.svg';
 import { useRecoilState } from 'recoil';
-import { departureAtom, destinationAtom, Location, queriesAtom, selectedAtom } from '../states/atom';
-import { useEffect } from 'react';
+import {
+  departureAtom, departureNameAtom,
+  destinationAtom,
+  destinationNameAtom,
+  Location,
+  queriesAtom,
+  selectedAtom
+} from '../states/atom';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { places } from '../dummy.ts';
 
 export default function SearchBar() {
-  const [queries, setQueries] = useRecoilState(queriesAtom);
+  const [, setQueries] = useRecoilState(queriesAtom);
   const [departure, setDeparture] = useRecoilState(departureAtom);
   const [destination, setDestination] = useRecoilState(destinationAtom);
   const location = useLocation();
   const [selected, setSelected] = useRecoilState(selectedAtom);
   const navigate = useNavigate();
-  //const [token] = useRecoilState(tokenAtom);
+  const [destinationtemp, setDestinationtemp] = useState('');
+  const [departuretemp, setDeparturetemp] = useState('');
+  const [destinationName ] = useRecoilState(destinationNameAtom);
+  const [departureName] = useRecoilState(departureNameAtom);
+
+  useEffect(() => {
+    const changeQuery = setTimeout(() => {
+      setQueries(destinationtemp === '' ? undefined : destinationtemp)
+    }, 500)
+    return () => {
+      clearTimeout(changeQuery)
+    }
+  }, [destinationtemp, setQueries])
+  useEffect(() => {
+    const changeQuery = setTimeout(() => {
+      setQueries(departuretemp === '' ? undefined : departuretemp)
+    }, 500)
+    return () => {
+      clearTimeout(changeQuery)
+    }
+  }, [departuretemp, setQueries])
 
   useEffect(() => {
     if (location.pathname === '/') {
@@ -54,30 +80,27 @@ export default function SearchBar() {
         document.querySelector('.departure')!.value =
           departure === Location.CURRENT
             ? '내 현재 위치'
-            : places.find((place) => place.id === departure)?.name;
+            : departureName
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [departure, location]);
+  }, [departure, selected]);
 
   useEffect(() => {
     if (selected === 0) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (destination === undefined) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         document.querySelector('.destination')!.value = '';
       } else if (destination === Location.CURRENT) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         document.querySelector('.destination')!.value = '내 현재 위치';
       } else {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        document.querySelector('.destination')!.value = places.find((place) => place.id === destination)?.name;
+        document.querySelector('.destination')!.value = destinationName
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [destination, selected]);
 
   return (
@@ -97,20 +120,12 @@ export default function SearchBar() {
             className="departure"
             $isMain={ location.pathname === '/' }
             $selected={ selected === 1 }
-            onChange={ (e) =>
-              setQueries({
-                ...queries,
-                departure: e.target.value,
-              })
+            onChange={ (e) => setDeparturetemp(e.target.value)
             }
             onFocus={ () => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-ignore
               document.querySelector('.departure')!.value = '';
-              setQueries({
-                ...queries,
-                destination: '',
-              });
               setDeparture(undefined);
 
               navigate('/search', { replace: true });
@@ -119,11 +134,9 @@ export default function SearchBar() {
             } }
             onBlur={ () => {
               if (location.pathname !== '/') {
-                setSelected(0);
-                setQueries({
-                  ...queries,
-                  destination: '',
-                });
+                //setSelected(0);
+                //setQueries(undefined);
+                //setDeparturetemp('')
                 return;
               }
             } }
@@ -140,18 +153,10 @@ export default function SearchBar() {
             className="destination"
             $isMain={ location.pathname === '/' }
             $selected={ selected === 2 }
-            onChange={ (e) =>
-              setQueries({
-                ...queries,
-                destination: e.target.value,
-              })
+            onChange={ (e) => setDestinationtemp(e.target.value)
             }
             onFocus={ () => {
               if (location.pathname === '/preview') {
-                setQueries({
-                  ...queries,
-                  destination: '',
-                });
                 setDestination(undefined);
                 // @ts-ignore
                 document.querySelector('.destination')!.value = '';
@@ -162,11 +167,9 @@ export default function SearchBar() {
               setSelected(2);
             } }
             onBlur={ () => {
-              setSelected(0);
-              setQueries({
-                ...queries,
-                destination: '',
-              });
+              //setSelected(0);
+              //setQueries(undefined);
+              //setDestinationtemp('')
             } }
           ></Input>
         </div>

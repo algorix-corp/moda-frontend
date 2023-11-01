@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Complex from "../../components/Complex.tsx";
+import Complex from "../../components/Complex";
 import { styled } from "styled-components";
 import { useState } from "react";
 
@@ -7,12 +7,11 @@ export default function RegisterName() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const phone = params.get('phone') ?? '';
-  const auth = params.get('auth') ?? '';
   const [name, setName] = useState<string>('');
   const dummy = () => {
   }
   const next = () => {
-    navigate(`/register/card?phone=${ phone }&auth=${ auth }&name=${ name }`, { replace: true })
+    navigate(`/register/card?phone=${ phone }&name=${ name }`, { replace: true })
   }
   return (
     <Complex title={ '새로운 계정 생성하기' } description={ '모다에서 사용할 사용자님의 이름을 입력해주세요.' } content={

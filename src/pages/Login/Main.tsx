@@ -21,22 +21,28 @@ export default function Login() {
     setErrormsg(undefined);
     setLoading(true);
     const body = {
-      phone_number: number,
+      number: number,
     };
-    api
-      .post('/auth/send_auth_code', body)
-      .then((r) => {
-        if (r.data.registered) {
-          navigate('/login/verify?phone=' + number, { replace: true });
-        } else {
-          navigate('/login/register?phone=' + number, { replace: true });
-        }
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-        setErrormsg('서버에서 오류가 발생했어요.');
-      });
+    api.post('/auth/is_user_exist', body).then((r) => {
+      if (r.data.message === 'not exist') {
+        navigate('/register/name?phone=' + number, { replace: true });
+      } else {
+        api
+          .post('/auth/send_code', body)
+          .then(() => {
+            setLoading(false);
+            navigate(`/login/verify?phone=${ number }`, { replace: true });
+          })
+          .catch(() => {
+            setLoading(false);
+            setErrormsg('서버에서 오류가 발생했어요.');
+          });
+      }
+    }).catch(() => {
+      setLoading(false);
+      setErrormsg('서버에서 오류가 발생했어요.');
+    })
+
   };
   useEffect(() => {
     if (phone !== null) {
@@ -46,32 +52,31 @@ export default function Login() {
   return (
     <Complex
       title="모다 시작하기"
-      description={`모다 서비스를 이용하기 위해\n전화번호를 입력해주세요.`}
+      description={ `모다 서비스를 이용하기 위해\n전화번호를 입력해주세요.` }
       content={
         <Input
           placeholder="전화번호를 입력하세요."
           type="tel"
-          value={number}
+          value={ number }
           autoCapitalize="off"
           autoComplete="off"
           autoCorrect="off"
-          onKeyDown={(e) => {
+          onKeyDown={ (e) => {
             if (!/[0-9]/.test(e.key) && e.keyCode !== 8) {
               e.preventDefault();
             }
-          }}
-          onChange={(e) => setNumber(e.target.value)}
-          disabled={loading}
+          } }
+          onChange={ (e) => setNumber(e.target.value) }
+          disabled={ loading }
         />
       }
-      errormessage={errormsg}
-      leftloretext="스킵"
+      errormessage={ errormsg }
+      leftloretext=""
       rightbtntext="계속하기"
-      leftloreclick={() =>
-        navigate(`/register/verify?phone=${number}`, { replace: true })
-      }
-      rightbtnclick={handleContinue}
-      disabled={loading}
+      leftloreclick={ () => {
+      } }
+      rightbtnclick={ handleContinue }
+      disabled={ loading }
     />
   );
 }
