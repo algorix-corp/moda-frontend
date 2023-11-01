@@ -1,17 +1,20 @@
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { tokenAtom } from "../states/atom.ts";
 
 export default function Navigator() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [token] = useRecoilState(tokenAtom)
   useEffect(() => {
     /* ===========DISABLE ONCE LOGIN DONE===========
     if (token===undefined) {
       navigate('/login');
     }
     */
-  }, []);
+  }, [token]);
   return (
     <div>
       <Container>
