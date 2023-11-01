@@ -32,6 +32,7 @@ interface Place {
   id: number;
   name: string;
   address: string;
+  location_poi: number;
 }
 
 export default function PlaceList() {
@@ -74,6 +75,7 @@ export default function PlaceList() {
   useEffect(() => {
     api.get(`/user/${ token }/bookmarks`).then((r) => {
       setSaved(r.data.bookmarks);
+      console.log(saved)
     });
   }, [token, setSaved])
 
@@ -90,7 +92,8 @@ export default function PlaceList() {
         places.push({
           id: pois[i].id,
           name: pois[i].name,
-          address: pois[i].upperAddrName + ' ' + pois[i].middleAddrName + ' ' + pois[i].lowerAddrName + ' ' + pois[i].roadName + ' ' + pois[i].firstBuildNo
+          address: pois[i].upperAddrName + ' ' + pois[i].middleAddrName + ' ' + pois[i].lowerAddrName + ' ' + pois[i].roadName + ' ' + pois[i].firstBuildNo,
+          location_poi: pois[i].location_poi
         });
       }
       setPlaces(places);
@@ -143,7 +146,7 @@ export default function PlaceList() {
       { places
         .filter((place) => {
           for (let i = 0; i < saved.length; i++) {
-            if (saved[i].id === place.id) {
+            if (saved[i].location_poi == place.id) {
               return true;
             }
           }
@@ -188,7 +191,8 @@ export default function PlaceList() {
             setLastObjInQueue(null);
           }, 10)
           setTimeout(() => {
-            setSaved(saved.filter((item) => item.id !== place.id))
+            setSaved(saved.filter((item) => item.location_poi !== place.id))
+            api.delete(`/user/${ token }/bookmarks/${ place.id }`).then()
           }, 150);
           e.stopPropagation()
         } }
@@ -203,7 +207,7 @@ export default function PlaceList() {
     .filter((place) => {
       let flag = true;
       for (let i = 0; i < saved.length; i++) {
-        if (saved[i].id === place.id) {
+        if (saved[i].location_poi == place.id) {
           flag = false;
           break;
         }
@@ -258,8 +262,15 @@ export default function PlaceList() {
                 id: place.id,
                 name: place.name,
                 address: place.address,
+                location_poi: place.id,
               }
               setSaved([...saved, new_saved]);
+              const body = {
+                location_name: place.name,
+                location_address: place.address,
+                location_poi: place.id,
+              }
+              api.post(`/user/${ token }/bookmarks`, body).then()
             }, 150);
 
             e.stopPropagation();

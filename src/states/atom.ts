@@ -28,6 +28,7 @@ interface Place {
   id: number;
   name: string;
   address: string;
+  location_poi: number;
 }
 
 export const placesAtom = atom<Place[]>({

@@ -1,20 +1,15 @@
 import styled from "styled-components";
-import {Directions} from "../../dummy.ts";
+import DRTPlace from "../Result/DRTPlace.tsx";
+import NormalPlace from "../Result/NormalPlace.tsx";
+import Line from "../Result/Line.tsx";
 
 export default function SearchResult() {
   return (
     <Container>
       <Text>모다가 <span>최적</span>의 경로를 찾았어요.</Text>
-      {
-        Directions.map((direction, index) => {
-          return (
-            <div key={ index }>
-              <p>{ direction }</p>
-            </div>
-          )
-        }
-        )
-      }
+      <DRTPlace time="15:30" instruction="DRT 하차 후, 부산역 승차"/>
+      <NormalPlace time="15:40" instruction="동아대학교 구덕캠퍼스에서 DRT 승차"/>
+      <Line time="20분" solid={false} DRT={true}/>
     </Container>
   )
 }

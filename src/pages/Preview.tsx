@@ -13,12 +13,14 @@ export default function Preview() {
   const [departure] = useRecoilState(departureAtom)
   const [destination] = useRecoilState(destinationAtom)
   const navigate = useNavigate()
+  //const [data, setData] = useEffect<any>(undefined)
   useEffect(() => {
     const params = new URLSearchParams()
     params.append('start_poi', departure.toString())
     params.append('end_poi', destination.toString())
     /*
     api.get('/map/route', { params }).then((r) => {
+      setData(r.data)
       setSearching(false)
     }).catch(() => {
       navigate('/preview/noresult', { replace: true })
