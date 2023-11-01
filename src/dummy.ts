@@ -55,8 +55,15 @@ export const places: {
 ];
 
 export const DRTSummary = {
-  shortenedMinutes: 300,
+  shortenedMinutes: 46,
   hourToTravel: 2,
-  minuteToTravel: 30,
-  fee: 100000
+  minuteToTravel: 50,
+  fee: 6450
 }
+
+export const Directions = [
+  "동아대학교 구덕캠퍼스에서 DRT 부산 3호차 승차",
+  "DRT 부산 3호차 하차 후, 부산역 승차",
+  "수서역 하차 후, DRT 강남 7호차 승차",
+  "DRT 강남 7호차 하차 후, 압구정로데오역 수인분당선 도착",
+]
