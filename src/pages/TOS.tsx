@@ -1,9 +1,20 @@
 import styled from "styled-components";
+import { Link, useLocation } from "react-router-dom";
 
 export default function TOS() {
+  const location = useLocation();
   return (
     <Container>
-      <Title>이용 약관</Title>
+      <Title>
+        {
+          location.pathname.startsWith('/setting') ? (
+            <Link to="/settings">{'<'}</Link>
+          ) : (
+            <Link to="/">{'<'}</Link>
+          )
+        }
+        이용 약관
+      </Title>
       <Text>돈주면 감사합니다</Text>
     </Container>
   );
@@ -23,4 +34,11 @@ const Text = styled.p`
 
 const Container = styled.div`
   margin: 20px;
+  & a {
+    margin-right: 10px;
+    font-family: 'SUIT Variable', sans-serif;
+    font-weight: 700;
+    color: var(--black);
+    text-decoration: none;
+  }
 `;

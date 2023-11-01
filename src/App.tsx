@@ -39,7 +39,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/tos',
+    path: '/settings/tos',
     element: (
       <div>
         <TOS/>
@@ -48,10 +48,26 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/privacy',
+    path: '/settings/privacy',
+    element: (
+      <div>
+        <Privacy/>
+        <Navigator/>
+      </div>
+    ),
+  },
+  {
+    path: '/tos',
     element: (
       <div>
         <TOS/>
+      </div>
+    ),
+  },
+  {
+    path: '/privacy',
+    element: (
+      <div>
         <Privacy/>
       </div>
     ),

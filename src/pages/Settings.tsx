@@ -60,8 +60,10 @@ export default function Settings() {
       } }/>
       <Divider/>
       <SettingItem icon={ HumanIcon } title="이용약관" onClick={ () => {
+        navigate('/settings/tos')
       } }/>
       <SettingItem icon={ HumanIcon } title="개인정보처리방침" onClick={ () => {
+        navigate('/settings/privacy')
       } }/>
       <Divider/>
       <SettingItem icon={ HumanIcon } title="로그아웃" onClick={ () => { setToken(undefined)
