@@ -20,12 +20,12 @@ import {
   selectedAtom,
   tokenAtom,
 } from '../states/atom';
-import api from "../api.ts";
+import api from '../api.ts';
 
 function blurObject(className: string) {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  document.querySelector(`.${ className }`)!.blur();
+  document.querySelector(`.${className}`)!.blur();
 }
 
 interface Place {
@@ -58,7 +58,7 @@ export default function PlaceList() {
     function handleScrollEnd() {
       setTimeout(() => {
         setIsScrolling(false);
-      }, 50)
+      }, 50);
     }
 
     window.addEventListener('touchmove', handleScroll);
@@ -70,32 +70,39 @@ export default function PlaceList() {
     };
   }, []);
 
-
   useEffect(() => {
-    api.get(`/user/${ token }/bookmarks`).then((r) => {
+    api.get(`/user/${token}/bookmarks`).then((r) => {
       setSaved(r.data.bookmarks);
     });
-  }, [token, setSaved])
+  }, [token, setSaved]);
 
   useEffect(() => {
-    console.log(queries)
     if (queries == undefined) {
       setPlaces([]);
-      return
+      return;
     }
-    api.get(`/map/search/${ queries }`).then((r) => {
+    api.get(`/map/search/${queries}`).then((r) => {
       const pois = r.data.searchPoiInfo.pois.poi;
       const places: Place[] = [];
       for (let i = 0; i < pois.length; i++) {
         places.push({
           id: pois[i].id,
           name: pois[i].name,
-          address: pois[i].upperAddrName + ' ' + pois[i].middleAddrName + ' ' + pois[i].lowerAddrName + ' ' + pois[i].roadName + ' ' + pois[i].firstBuildNo
+          address:
+            pois[i].upperAddrName +
+            ' ' +
+            pois[i].middleAddrName +
+            ' ' +
+            pois[i].lowerAddrName +
+            ' ' +
+            pois[i].roadName +
+            ' ' +
+            pois[i].firstBuildNo,
         });
       }
       setPlaces(places);
-    })
-  }, [queries, setSaved, setPlaces])
+    });
+  }, [queries, setSaved, setPlaces]);
 
   const handlers = useSwipeable({
     onSwipedLeft: () => {
@@ -108,7 +115,7 @@ export default function PlaceList() {
   });
 
   return (
-    <Container { ...handlers }>
+    <Container {...handlers}>
       {/* <PlaceGroup>
         <ContentsGroup>
           <IdenticalIcon src={CircleMapSVG} />
@@ -116,9 +123,9 @@ export default function PlaceList() {
             <Name>지도에서 고르기</Name>
           </TextGroup>
         </ContentsGroup>
-      </PlaceGroup> */ }
+      </PlaceGroup> */}
       <PlaceGroup
-        onTouchEnd={ () => {
+        onTouchEnd={() => {
           if (isScrolling) return;
           setSelected(0);
           setQueries(undefined);
@@ -131,16 +138,16 @@ export default function PlaceList() {
             setDestinationName('내 현재 위치');
             blurObject('destination');
           }
-        } }
+        }}
       >
         <ContentsGroup>
-          <IdenticalIcon src={ CircleLocationSVG }/>
+          <IdenticalIcon src={CircleLocationSVG} />
           <TextGroup>
             <Name>내 현재 위치</Name>
           </TextGroup>
         </ContentsGroup>
       </PlaceGroup>
-      { places
+      {places
         .filter((place) => {
           for (let i = 0; i < saved.length; i++) {
             if (saved[i].id === place.id) {
@@ -149,130 +156,126 @@ export default function PlaceList() {
           }
         })
         .map((place, index) => (
-        <PlaceGroup
-        key={ index }
-               onTouchStart={ () => {
-                 setLastObjInQueue(index);
-               } }
-               onTouchEnd={ () => {
-                 if (isSwiped) return;
-                 if (isScrolling) return;
-                 setSelected(0);
-                 setQueries(undefined);
-                 if (selected === 1) {
-                   setDeparture(place.id);
-                   setDepartureName(place.name)
-                   blurObject('departure');
-                 } else if (selected === 2) {
-                   setDestination(place.id);
-                   setDestinationName(place.name)
-                   blurObject('destination');
-                 }
-               } }
-    >
-      <ContentsGroup $swiped={ lastObj === index && isSwiped }>
-        <IdenticalIcon src={ CircleSaveSVG }/>
-        <TextGroup>
-          <Name>{ place.name }</Name>
-          <Address>{ place.address }</Address>
-        </TextGroup>
-      </ContentsGroup>
-      <SaveButton
-        type="unsave"
-        $swiped={ lastObj === index && isSwiped }
-        onTouchEnd={ (e) => {
-          e.stopPropagation()
-          setTimeout(() => {
-            setIsSwiped(false);
-            setLastObj(null);
-            setLastObjInQueue(null);
-          }, 10)
-          setTimeout(() => {
-            setSaved(saved.filter((item) => item.id !== place.id))
-          }, 150);
-          e.stopPropagation()
-        } }
-      >
-        <Icon src={ UnsaveSVG }/>
-      </SaveButton>
-    </PlaceGroup>
-  )
-) }
-{
-  places
-    .filter((place) => {
-      let flag = true;
-      for (let i = 0; i < saved.length; i++) {
-        if (saved[i].id === place.id) {
-          flag = false;
-          break;
-        }
-      }
-      return flag;
-    })
-    .map((place, index) => (
-      <PlaceGroup
-        key={ index }
-        onTouchStart={ () => {
-          setLastObjInQueue(index + saved.length);
-        } }
-        onTouchEnd={ () => {
-          if (isSwiped) return;
-          if (isScrolling) return;
-          setSelected(0);
-          setQueries(undefined);
-          if (selected === 1) {
-            setDeparture(place.id);
-            setDepartureName(place.name)
-            blurObject('departure');
-          } else if (selected === 2) {
-            setDestination(place.id);
-            setDestinationName(place.name)
-            blurObject('destination');
-          }
-        } }
-      >
-        <ContentsGroup
-          $swiped={ lastObj === index + saved.length && isSwiped }
-        >
-          <IdenticalIcon src={ CircleSearchSVG }/>
-          <TextGroup>
-            <Name>{ place.name }</Name>
-            <Address>{ place.address }</Address>
-          </TextGroup>
-        </ContentsGroup>
-        <SaveButton
-          type="save"
-          $swiped={ lastObj === index + saved.length && isSwiped }
-          onTouchEnd={ (e) => {
-            e.stopPropagation();
-
-            setTimeout(() => {
-              setIsSwiped(false);
-              setLastObj(null);
-              setLastObjInQueue(null);
-            }, 10)
-
-            setTimeout(() => {
-              const new_saved = {
-                id: place.id,
-                name: place.name,
-                address: place.address,
+          <PlaceGroup
+            key={index}
+            onTouchStart={() => {
+              setLastObjInQueue(index);
+            }}
+            onTouchEnd={() => {
+              if (isSwiped) return;
+              if (isScrolling) return;
+              setSelected(0);
+              setQueries(undefined);
+              if (selected === 1) {
+                setDeparture(place.id);
+                setDepartureName(place.name);
+                blurObject('departure');
+              } else if (selected === 2) {
+                setDestination(place.id);
+                setDestinationName(place.name);
+                blurObject('destination');
               }
-              setSaved([...saved, new_saved]);
-            }, 150);
+            }}
+          >
+            <ContentsGroup $swiped={lastObj === index && isSwiped}>
+              <IdenticalIcon src={CircleSaveSVG} />
+              <TextGroup>
+                <Name>{place.name}</Name>
+                <Address>{place.address}</Address>
+              </TextGroup>
+            </ContentsGroup>
+            <SaveButton
+              type="unsave"
+              $swiped={lastObj === index && isSwiped}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
+                setTimeout(() => {
+                  setIsSwiped(false);
+                  setLastObj(null);
+                  setLastObjInQueue(null);
+                }, 10);
+                setTimeout(() => {
+                  setSaved(saved.filter((item) => item.id !== place.id));
+                }, 150);
+                e.stopPropagation();
+              }}
+            >
+              <Icon src={UnsaveSVG} />
+            </SaveButton>
+          </PlaceGroup>
+        ))}
+      {places
+        .filter((place) => {
+          let flag = true;
+          for (let i = 0; i < saved.length; i++) {
+            if (saved[i].id === place.id) {
+              flag = false;
+              break;
+            }
+          }
+          return flag;
+        })
+        .map((place, index) => (
+          <PlaceGroup
+            key={index}
+            onTouchStart={() => {
+              setLastObjInQueue(index + saved.length);
+            }}
+            onTouchEnd={() => {
+              if (isSwiped) return;
+              if (isScrolling) return;
+              setSelected(0);
+              setQueries(undefined);
+              if (selected === 1) {
+                setDeparture(place.id);
+                setDepartureName(place.name);
+                blurObject('departure');
+              } else if (selected === 2) {
+                setDestination(place.id);
+                setDestinationName(place.name);
+                blurObject('destination');
+              }
+            }}
+          >
+            <ContentsGroup
+              $swiped={lastObj === index + saved.length && isSwiped}
+            >
+              <IdenticalIcon src={CircleSearchSVG} />
+              <TextGroup>
+                <Name>{place.name}</Name>
+                <Address>{place.address}</Address>
+              </TextGroup>
+            </ContentsGroup>
+            <SaveButton
+              type="save"
+              $swiped={lastObj === index + saved.length && isSwiped}
+              onTouchEnd={(e) => {
+                e.stopPropagation();
 
-            e.stopPropagation();
-          } }
-        >
-          <Icon src={ SaveSVG }/>
-        </SaveButton>
-      </PlaceGroup>
-    ))
-}
-</Container>
-)
-  ;
+                setTimeout(() => {
+                  setIsSwiped(false);
+                  setLastObj(null);
+                  setLastObjInQueue(null);
+                }, 10);
+
+                setTimeout(() => {
+                  const new_saved = {
+                    id: place.id,
+                    name: place.name,
+                    address: place.address,
+                  };
+                  setSaved([...saved, new_saved]);
+                }, 150);
+
+                e.stopPropagation();
+              }}
+            >
+              <Icon src={SaveSVG} />
+            </SaveButton>
+          </PlaceGroup>
+        ))}
+    </Container>
+  );
 }
 
 const Container = styled.div`
@@ -300,7 +303,7 @@ const ContentsGroup = styled.div<{
   width: calc(100% - 40px);
   height: 100%;
 
-  transform: translateX(${ (props) => (props.$swiped ? -60 : 0) }px);
+  transform: translateX(${(props) => (props.$swiped ? -60 : 0)}px);
 
   display: flex;
   align-items: center;
@@ -345,10 +348,12 @@ const SaveButton = styled.div<{
   width: 60px;
   height: 75px;
 
-  transform: translateX(${ (props) => (props.$swiped ? 0 : 60) }px);
+  transform: translateX(${(props) => (props.$swiped ? 0 : 60)}px);
   z-index: 1;
 
-  background-color: var(--${ (props) => (props.type === 'save' ? 'primarySub' : 'redSub') });
+  background-color: var(
+    --${(props) => (props.type === 'save' ? 'primarySub' : 'redSub')}
+  );
 
   transition: transform 150ms ease;
 `;
