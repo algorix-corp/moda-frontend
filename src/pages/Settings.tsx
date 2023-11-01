@@ -1,170 +1,388 @@
-import styled from "styled-components";
-import ViewMore from '../assets/view-more.svg'
-import HumanIcon from '../assets/human.svg'
-import { useRecoilState } from "recoil";
-import { tokenAtom } from "../states/atom.ts";
-import { useNavigate } from "react-router-dom";
-import api from "../api.ts";
-import { useEffect, useState } from "react";
+import styled from 'styled-components';
+import ViewMore from '../assets/view-more.svg';
+import { useRecoilState } from 'recoil';
+import { tokenAtom } from '../states/atom.ts';
+import { useNavigate } from 'react-router-dom';
+import api from '../api.ts';
+import { useEffect, useState } from 'react';
 
-function SettingItem({ icon, title, description, onClick, destructive = false, smallTitle = false }: {
-  icon: string,
-  title: string,
-  description?: string,
-  onClick: () => void,
-  destructive?: boolean,
-  smallTitle?: boolean,
+function SettingItem({
+  icon,
+  title,
+  description,
+  onClick,
+  destructive = false,
+  smallTitle = false,
+  singlePage = false,
+}: {
+  icon: JSX.Element;
+  title: string;
+  description?: string;
+  onClick: () => void;
+  destructive?: boolean;
+  smallTitle?: boolean;
+  singlePage?: boolean;
 }) {
   return (
-    <SettingArea onClick={ onClick }>
-      <Icon>
-        <img src={ icon } alt="아이콘"/>
-      </Icon>
+    <SettingArea onClick={onClick}>
+      <Icon>{icon}</Icon>
       <TitleArea>
-        {
-          smallTitle ?
-            (
-              <>
-                <TitleSecondary>{ title }</TitleSecondary>
-                <TitlePrimary $destructive={ destructive }>{ description }</TitlePrimary>
-              </>
-            ) : (
-              <>
-                <TitlePrimary $destructive={ destructive }>{ title }</TitlePrimary>
-                <TitleSecondary>{ description }</TitleSecondary>
-              </>
-            )
-        }
+        {smallTitle ? (
+          <>
+            <TitleSecondary>{title}</TitleSecondary>
+            <TitlePrimary $destructive={destructive}>
+              {description}
+            </TitlePrimary>
+          </>
+        ) : (
+          <>
+            <TitlePrimary $destructive={destructive}>{title}</TitlePrimary>
+            <TitleSecondary>{description}</TitleSecondary>
+          </>
+        )}
       </TitleArea>
-      <ViewMoreIcon>
-        <img src={ ViewMore } alt="go"/>
-      </ViewMoreIcon>
+      {singlePage ? undefined : (
+        <ViewMoreIcon>
+          <img src={ViewMore} alt="go" />
+        </ViewMoreIcon>
+      )}
     </SettingArea>
   );
 }
 
 export default function Settings() {
-  const [token, setToken] = useRecoilState(tokenAtom)
-  const [name, setName] = useState<string>('')
-  const [phone, setPhone] = useState<string>('')
-  const [card, setCard] = useState<string>('')
-  const navigate = useNavigate()
+  const [token, setToken] = useRecoilState(tokenAtom);
+  const [name, setName] = useState<string>('');
+  const [phone, setPhone] = useState<string>('');
+  const [card, setCard] = useState<string>('');
+  const navigate = useNavigate();
   useEffect(() => {
-    api.get(`/user/${ token }`).then((r) => {
-      setName(r.data.user.username)
-      const phone = r.data.user.phone_number
-      setPhone(phone.slice(0, 3) + '-' + phone.slice(3, 7) + '-' + phone.slice(7, 11))
-      const card = r.data.user.card_number
-      setCard(card.slice(0, 4) + '-' + card.slice(4, 8) + '-' + card.slice(8, 12) + '-' + card.slice(12, 16))
-    }).catch(() => {
-      setName('오류가 발생했습니다.')
-    })
-  }, [token])
+    api
+      .get(`/user/${token}`)
+      .then((r) => {
+        setName(r.data.user.username);
+        const phone = r.data.user.phone_number;
+        setPhone(
+          phone.slice(0, 3) + '-' + phone.slice(3, 7) + '-' + phone.slice(7, 11)
+        );
+        const card = r.data.user.card_number;
+        setCard(
+          card.slice(0, 4) +
+            '-' +
+            card.slice(4, 8) +
+            '-' +
+            card.slice(8, 12) +
+            '-' +
+            card.slice(12, 16)
+        );
+      })
+      .catch(() => {
+        setName('오류가 발생했습니다.');
+      });
+  }, [token]);
   const handleNameChange = () => {
-
-    const newName = prompt('이름을 입력해주세요.')
+    const newName = prompt('이름을 입력해주세요.');
     if (newName === '') {
-      return
+      return;
     }
     const body = {
       username: newName,
       card_number: card.replace(/-/g, ''),
       phone_number: phone.replace(/-/g, ''),
-      notification: true
-    }
-    api.put(`/user/${ token }`, body).then(() => {
-      window.location.reload()
-    })
-  }
+      notification: true,
+    };
+    api.put(`/user/${token}`, body).then(() => {
+      window.location.reload();
+    });
+  };
   const handlePhoneChange = () => {
-    const newPhone = prompt('전화번호를 입력해주세요.')
+    const newPhone = prompt('전화번호를 입력해주세요.');
     if (newPhone === '') {
-      return
+      return;
     }
     const body_verify = {
       number: newPhone.replace(/-/g, ''),
-    }
-    api.post('/auth/is_user_exist', body_verify).then((r) => {
-      if(r.data.message === 'exist') {
-        alert('이미 존재하는 전화번호입니다.')
-        return
-      }
-    }).catch(() => {
-      alert('오류가 발생했습니다.')
-      return
-    })
-    api.post('/auth/send_code', body_verify).then().catch(() => {
-      alert('오류가 발생했습니다.')
-      return
-    })
-    const code = prompt('인증번호를 입력해주세요.')
-    if (code === '') {
-      return
-    }
-    api.post('/auth/verify', {
-      phone: newPhone.replace(/-/g, ''),
-      code: code
-    }).then(() => {
-      const body = {
-        username: name,
-        card_number: card.replace(/-/g, ''),
-        phone_number: newPhone.replace(/-/g, ''),
-        notification: true
-      }
-      api.put(`/user/${ token }`, body).then(() => {
-        window.location.reload()
+    };
+    api
+      .post('/auth/is_user_exist', body_verify)
+      .then((r) => {
+        if (r.data.message === 'exist') {
+          alert('이미 존재하는 전화번호입니다.');
+          return;
+        }
       })
-    }).catch(() => {
-      alert('인증번호가 일치하지 않거나 오류가 발생했습니다.')
-      return
-    })
-  }
+      .catch(() => {
+        alert('오류가 발생했습니다.');
+        return;
+      });
+    api
+      .post('/auth/send_code', body_verify)
+      .then()
+      .catch(() => {
+        alert('오류가 발생했습니다.');
+        return;
+      });
+    const code = prompt('인증번호를 입력해주세요.');
+    if (code === '') {
+      return;
+    }
+    api
+      .post('/auth/verify', {
+        phone: newPhone.replace(/-/g, ''),
+        code: code,
+      })
+      .then(() => {
+        const body = {
+          username: name,
+          card_number: card.replace(/-/g, ''),
+          phone_number: newPhone.replace(/-/g, ''),
+          notification: true,
+        };
+        api.put(`/user/${token}`, body).then(() => {
+          window.location.reload();
+        });
+      })
+      .catch(() => {
+        alert('인증번호가 일치하지 않거나 오류가 발생했습니다.');
+        return;
+      });
+  };
   const handleCardChange = () => {
-    const newCard = prompt('교통카드 번호를 입력해주세요.')
+    const newCard = prompt('교통카드 번호를 입력해주세요.');
     if (newCard === '') {
-      return
+      return;
     }
     const body = {
       username: name,
       card_number: newCard.replace(/-/g, ''),
       phone_number: phone.replace(/-/g, ''),
-      notification: true
-    }
-    api.put(`/user/${ token }`, body).then(() => {
-      window.location.reload()
-    })
-  }
+      notification: true,
+    };
+    api.put(`/user/${token}`, body).then(() => {
+      window.location.reload();
+    });
+  };
   return (
     <Container>
-      <div style={ { padding: '16px 0 ' } }>
+      <div style={{ padding: '16px 0 ' }}>
         <Title>설정</Title>
       </div>
-      <SettingItem icon={ HumanIcon } title="이름" description={ name } smallTitle={ true } onClick={ handleNameChange }/>
-      <SettingItem icon={ HumanIcon } title="전화번호" description={ phone } smallTitle={ true }
-                   onClick={ handlePhoneChange }/>
-      <SettingItem icon={ HumanIcon } title="교통카드" description={ card } smallTitle={ true }
-                   onClick={ handleCardChange }/>
-      <Divider/>
-      <SettingItem icon={ HumanIcon } title="알림" description="DRT 예약 시간 10분 전 푸시 알림을 보내줘요." onClick={ () => {
-        alert("이 기능은 준비 중이에요.")
-      } }/>
-      <Divider/>
-      <SettingItem icon={ HumanIcon } title="이용약관" onClick={ () => {
-        navigate('/settings/tos', { replace: true })
-      } }/>
-      <SettingItem icon={ HumanIcon } title="개인정보처리방침" onClick={ () => {
-        navigate('/settings/privacy', { replace: true })
-      } }/>
-      <Divider/>
-      <SettingItem icon={ HumanIcon } title="로그아웃" onClick={ () => {
-        setToken(undefined)
-        localStorage.removeItem('token')
-      } }/>
-      <SettingItem icon={ HumanIcon } title="모다 계정 삭제하기" onClick={ () => {
-        api.delete(`/user/${ token }`).then()
-        setToken(undefined)
-        localStorage.removeItem('token')
-      } } destructive={ true }/>
+      <SettingItem
+        icon={
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 27 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="13.5" cy="13.5" r="13.5" fill="#BFC8D6" />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M10.6875 9.75C10.6875 9.00408 10.9838 8.28871 11.5113 7.76126C12.0387 7.23382 12.7541 6.9375 13.5 6.9375C14.2459 6.9375 14.9613 7.23382 15.4887 7.76126C16.0162 8.28871 16.3125 9.00408 16.3125 9.75C16.3125 10.4959 16.0162 11.2113 15.4887 11.7387C14.9613 12.2662 14.2459 12.5625 13.5 12.5625C12.7541 12.5625 12.0387 12.2662 11.5113 11.7387C10.9838 11.2113 10.6875 10.4959 10.6875 9.75ZM8.34437 18.5656C8.36545 17.2122 8.9179 15.9213 9.88247 14.9716C10.847 14.0219 12.1464 13.4897 13.5 13.4897C14.8536 13.4897 16.1529 14.0219 17.1175 14.9716C18.0821 15.9213 18.6345 17.2122 18.6556 18.5656C18.6572 18.6567 18.6323 18.7464 18.5838 18.8235C18.5353 18.9006 18.4653 18.962 18.3825 19C16.8507 19.7023 15.1851 20.0648 13.5 20.0625C11.7587 20.0625 10.1044 19.6825 8.6175 19C8.53468 18.962 8.46473 18.9006 8.41623 18.8235C8.36772 18.7464 8.34275 18.6567 8.34437 18.5656Z"
+              fill="white"
+            />
+          </svg>
+        }
+        title="이름"
+        description={name}
+        smallTitle={true}
+        onClick={handleNameChange}
+      />
+      <SettingItem
+        icon={
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 27 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="13.5" cy="13.5" r="13.5" fill="#BFC8D6" />
+            <g clipPath="url(#clip0_140_669)">
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M6.9375 8.8125C6.9375 8.31522 7.13504 7.83831 7.48667 7.48667C7.83831 7.13504 8.31522 6.9375 8.8125 6.9375H9.67C10.2075 6.9375 10.6762 7.30375 10.8069 7.825L11.4975 10.5894C11.5535 10.8131 11.5422 11.0484 11.465 11.2658C11.3878 11.4831 11.2483 11.6729 11.0638 11.8113L10.2556 12.4175C10.1713 12.4806 10.1531 12.5731 10.1769 12.6375C10.5296 13.5968 11.0866 14.4679 11.8093 15.1907C12.5321 15.9134 13.4032 16.4704 14.3625 16.8231C14.4269 16.8469 14.5188 16.8287 14.5825 16.7444L15.1887 15.9362C15.3271 15.7517 15.5169 15.6122 15.7342 15.535C15.9516 15.4578 16.1869 15.4465 16.4106 15.5025L19.175 16.1931C19.6962 16.3237 20.0625 16.7925 20.0625 17.3306V18.1875C20.0625 18.6848 19.865 19.1617 19.5133 19.5133C19.1617 19.865 18.6848 20.0625 18.1875 20.0625H16.7812C11.345 20.0625 6.9375 15.655 6.9375 10.2188V8.8125Z"
+                fill="white"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_140_669">
+                <rect
+                  width="15"
+                  height="15"
+                  fill="white"
+                  transform="translate(6 6)"
+                />
+              </clipPath>
+            </defs>
+          </svg>
+        }
+        title="전화번호"
+        description={phone}
+        smallTitle={true}
+        onClick={handlePhoneChange}
+      />
+      <SettingItem
+        icon={
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 27 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="13.5" cy="13.5" r="13.5" fill="#BFC8D6" />
+            <path
+              d="M8.8125 8.34375C8.31522 8.34375 7.83831 8.54129 7.48667 8.89292C7.13504 9.24456 6.9375 9.72147 6.9375 10.2188V10.6875H20.0625V10.2188C20.0625 9.72147 19.865 9.24456 19.5133 8.89292C19.1617 8.54129 18.6848 8.34375 18.1875 8.34375H8.8125Z"
+              fill="white"
+            />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M20.0625 12.0938H6.9375V16.7812C6.9375 17.2785 7.13504 17.7554 7.48667 18.1071C7.83831 18.4587 8.31522 18.6562 8.8125 18.6562H18.1875C18.6848 18.6562 19.1617 18.4587 19.5133 18.1071C19.865 17.7554 20.0625 17.2785 20.0625 16.7812V12.0938ZM8.8125 14.4375C8.8125 14.3132 8.86189 14.194 8.94979 14.106C9.0377 14.0181 9.15693 13.9688 9.28125 13.9688H13.0312C13.1556 13.9688 13.2748 14.0181 13.3627 14.106C13.4506 14.194 13.5 14.3132 13.5 14.4375C13.5 14.5618 13.4506 14.681 13.3627 14.769C13.2748 14.8569 13.1556 14.9062 13.0312 14.9062H9.28125C9.15693 14.9062 9.0377 14.8569 8.94979 14.769C8.86189 14.681 8.8125 14.5618 8.8125 14.4375ZM9.28125 15.8438C9.15693 15.8438 9.0377 15.8931 8.94979 15.981C8.86189 16.069 8.8125 16.1882 8.8125 16.3125C8.8125 16.4368 8.86189 16.556 8.94979 16.644C9.0377 16.7319 9.15693 16.7812 9.28125 16.7812H11.1562C11.2806 16.7812 11.3998 16.7319 11.4877 16.644C11.5756 16.556 11.625 16.4368 11.625 16.3125C11.625 16.1882 11.5756 16.069 11.4877 15.981C11.3998 15.8931 11.2806 15.8438 11.1562 15.8438H9.28125Z"
+              fill="white"
+            />
+          </svg>
+        }
+        title="교통카드"
+        description={card}
+        smallTitle={true}
+        onClick={handleCardChange}
+      />
+      <Divider />
+      <SettingItem
+        icon={
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 27 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="13.5" cy="13.5" r="13.5" fill="#BFC8D6" />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M9.28125 11.625C9.28125 10.5061 9.72572 9.43306 10.5169 8.64189C11.3081 7.85072 12.3811 7.40625 13.5 7.40625C14.6189 7.40625 15.6919 7.85072 16.4831 8.64189C17.2743 9.43306 17.7188 10.5061 17.7188 11.625V12.0938C17.7188 13.4206 18.2188 14.6294 19.0425 15.5438C19.0938 15.6006 19.1304 15.6692 19.1491 15.7435C19.1678 15.8178 19.168 15.8955 19.1496 15.9699C19.1313 16.0442 19.0951 16.113 19.044 16.1701C18.993 16.2272 18.9287 16.271 18.8569 16.2975C17.8919 16.6537 16.8819 16.9163 15.8375 17.0744C15.861 17.3957 15.818 17.7184 15.7112 18.0224C15.6044 18.3264 15.436 18.6051 15.2167 18.8411C14.9973 19.0771 14.7317 19.2653 14.4363 19.394C14.1409 19.5227 13.8222 19.5892 13.5 19.5892C13.1778 19.5892 12.8591 19.5227 12.5637 19.394C12.2683 19.2653 12.0027 19.0771 11.7833 18.8411C11.564 18.6051 11.3956 18.3264 11.2888 18.0224C11.182 17.7184 11.139 17.3957 11.1625 17.0744C10.1323 16.9183 9.12062 16.6577 8.14313 16.2969C8.07133 16.2704 8.00712 16.2267 7.9561 16.1697C7.90508 16.1126 7.8688 16.044 7.85043 15.9697C7.83205 15.8954 7.83215 15.8177 7.85071 15.7435C7.86926 15.6692 7.90571 15.6007 7.95688 15.5438C8.81113 14.5979 9.28317 13.3682 9.28125 12.0938V11.625ZM12.095 17.1875C12.087 17.377 12.1174 17.5661 12.1844 17.7436C12.2514 17.921 12.3536 18.0831 12.4849 18.22C12.6161 18.3569 12.7737 18.4658 12.9482 18.5402C13.1226 18.6147 13.3103 18.653 13.5 18.653C13.6897 18.653 13.8774 18.6147 14.0518 18.5402C14.2263 18.4658 14.3839 18.3569 14.5151 18.22C14.6464 18.0831 14.7486 17.921 14.8156 17.7436C14.8826 17.5661 14.913 17.377 14.905 17.1875C13.9702 17.2717 13.0298 17.2717 12.095 17.1875Z"
+              fill="white"
+            />
+          </svg>
+        }
+        title="알림"
+        description="DRT 예약 시간 10분 전 푸시 알림을 보내줘요."
+        onClick={() => {
+          alert('이 기능은 준비 중이에요.');
+        }}
+      />
+      <Divider />
+      <SettingItem
+        icon={
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 27 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="13.5" cy="13.5" r="13.5" fill="#BFC8D6" />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M8.57812 7.875C7.93062 7.875 7.40625 8.4 7.40625 9.04688V17.25C7.40625 17.7473 7.60379 18.2242 7.95542 18.5758C8.30706 18.9275 8.78397 19.125 9.28125 19.125H18.6562C18.159 19.125 17.6821 18.9275 17.3304 18.5758C16.9788 18.2242 16.7812 17.7473 16.7812 17.25V9.04688C16.7812 8.39937 16.2563 7.875 15.6094 7.875H8.57812ZM13.5 12.0938C13.3757 12.0938 13.2565 12.1431 13.1685 12.231C13.0806 12.319 13.0312 12.4382 13.0312 12.5625C13.0312 12.6868 13.0806 12.806 13.1685 12.894C13.2565 12.9819 13.3757 13.0312 13.5 13.0312H14.4375C14.5618 13.0312 14.681 12.9819 14.769 12.894C14.8569 12.806 14.9062 12.6868 14.9062 12.5625C14.9062 12.4382 14.8569 12.319 14.769 12.231C14.681 12.1431 14.5618 12.0938 14.4375 12.0938H13.5ZM13.0312 10.6875C13.0312 10.5632 13.0806 10.444 13.1685 10.356C13.2565 10.2681 13.3757 10.2188 13.5 10.2188H14.4375C14.5618 10.2188 14.681 10.2681 14.769 10.356C14.8569 10.444 14.9062 10.5632 14.9062 10.6875C14.9062 10.8118 14.8569 10.931 14.769 11.019C14.681 11.1069 14.5618 11.1562 14.4375 11.1562H13.5C13.3757 11.1562 13.2565 11.1069 13.1685 11.019C13.0806 10.931 13.0312 10.8118 13.0312 10.6875ZM9.75 13.9688C9.62568 13.9688 9.50645 14.0181 9.41854 14.106C9.33064 14.194 9.28125 14.3132 9.28125 14.4375C9.28125 14.5618 9.33064 14.681 9.41854 14.769C9.50645 14.8569 9.62568 14.9062 9.75 14.9062H14.4375C14.5618 14.9062 14.681 14.8569 14.769 14.769C14.8569 14.681 14.9062 14.5618 14.9062 14.4375C14.9062 14.3132 14.8569 14.194 14.769 14.106C14.681 14.0181 14.5618 13.9688 14.4375 13.9688H9.75ZM9.28125 16.3125C9.28125 16.1882 9.33064 16.069 9.41854 15.981C9.50645 15.8931 9.62568 15.8438 9.75 15.8438H14.4375C14.5618 15.8438 14.681 15.8931 14.769 15.981C14.8569 16.069 14.9062 16.1882 14.9062 16.3125C14.9062 16.4368 14.8569 16.556 14.769 16.644C14.681 16.7319 14.5618 16.7812 14.4375 16.7812H9.75C9.62568 16.7812 9.50645 16.7319 9.41854 16.644C9.33064 16.556 9.28125 16.4368 9.28125 16.3125ZM9.75 10.2188C9.62568 10.2188 9.50645 10.2681 9.41854 10.356C9.33064 10.444 9.28125 10.5632 9.28125 10.6875V12.5625C9.28125 12.8212 9.49125 13.0312 9.75 13.0312H11.625C11.7493 13.0312 11.8685 12.9819 11.9565 12.894C12.0444 12.806 12.0938 12.6868 12.0938 12.5625V10.6875C12.0938 10.5632 12.0444 10.444 11.9565 10.356C11.8685 10.2681 11.7493 10.2188 11.625 10.2188H9.75Z"
+              fill="white"
+            />
+            <path
+              d="M17.7188 10.2188H18.8906C19.2787 10.2188 19.5938 10.5337 19.5938 10.9219V17.25C19.5938 17.4986 19.495 17.7371 19.3192 17.9129C19.1433 18.0887 18.9049 18.1875 18.6562 18.1875C18.4076 18.1875 18.1692 18.0887 17.9933 17.9129C17.8175 17.7371 17.7188 17.4986 17.7188 17.25V10.2188Z"
+              fill="white"
+            />
+          </svg>
+        }
+        title="이용약관"
+        onClick={() => {
+          navigate('/settings/tos', { replace: true });
+        }}
+      />
+      <SettingItem
+        icon={
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 27 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="13.5" cy="13.5" r="13.5" fill="#BFC8D6" />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M8.57812 7.875C7.93062 7.875 7.40625 8.4 7.40625 9.04688V17.25C7.40625 17.7473 7.60379 18.2242 7.95542 18.5758C8.30706 18.9275 8.78397 19.125 9.28125 19.125H18.6562C18.159 19.125 17.6821 18.9275 17.3304 18.5758C16.9788 18.2242 16.7812 17.7473 16.7812 17.25V9.04688C16.7812 8.39937 16.2563 7.875 15.6094 7.875H8.57812ZM13.5 12.0938C13.3757 12.0938 13.2565 12.1431 13.1685 12.231C13.0806 12.319 13.0312 12.4382 13.0312 12.5625C13.0312 12.6868 13.0806 12.806 13.1685 12.894C13.2565 12.9819 13.3757 13.0312 13.5 13.0312H14.4375C14.5618 13.0312 14.681 12.9819 14.769 12.894C14.8569 12.806 14.9062 12.6868 14.9062 12.5625C14.9062 12.4382 14.8569 12.319 14.769 12.231C14.681 12.1431 14.5618 12.0938 14.4375 12.0938H13.5ZM13.0312 10.6875C13.0312 10.5632 13.0806 10.444 13.1685 10.356C13.2565 10.2681 13.3757 10.2188 13.5 10.2188H14.4375C14.5618 10.2188 14.681 10.2681 14.769 10.356C14.8569 10.444 14.9062 10.5632 14.9062 10.6875C14.9062 10.8118 14.8569 10.931 14.769 11.019C14.681 11.1069 14.5618 11.1562 14.4375 11.1562H13.5C13.3757 11.1562 13.2565 11.1069 13.1685 11.019C13.0806 10.931 13.0312 10.8118 13.0312 10.6875ZM9.75 13.9688C9.62568 13.9688 9.50645 14.0181 9.41854 14.106C9.33064 14.194 9.28125 14.3132 9.28125 14.4375C9.28125 14.5618 9.33064 14.681 9.41854 14.769C9.50645 14.8569 9.62568 14.9062 9.75 14.9062H14.4375C14.5618 14.9062 14.681 14.8569 14.769 14.769C14.8569 14.681 14.9062 14.5618 14.9062 14.4375C14.9062 14.3132 14.8569 14.194 14.769 14.106C14.681 14.0181 14.5618 13.9688 14.4375 13.9688H9.75ZM9.28125 16.3125C9.28125 16.1882 9.33064 16.069 9.41854 15.981C9.50645 15.8931 9.62568 15.8438 9.75 15.8438H14.4375C14.5618 15.8438 14.681 15.8931 14.769 15.981C14.8569 16.069 14.9062 16.1882 14.9062 16.3125C14.9062 16.4368 14.8569 16.556 14.769 16.644C14.681 16.7319 14.5618 16.7812 14.4375 16.7812H9.75C9.62568 16.7812 9.50645 16.7319 9.41854 16.644C9.33064 16.556 9.28125 16.4368 9.28125 16.3125ZM9.75 10.2188C9.62568 10.2188 9.50645 10.2681 9.41854 10.356C9.33064 10.444 9.28125 10.5632 9.28125 10.6875V12.5625C9.28125 12.8212 9.49125 13.0312 9.75 13.0312H11.625C11.7493 13.0312 11.8685 12.9819 11.9565 12.894C12.0444 12.806 12.0938 12.6868 12.0938 12.5625V10.6875C12.0938 10.5632 12.0444 10.444 11.9565 10.356C11.8685 10.2681 11.7493 10.2188 11.625 10.2188H9.75Z"
+              fill="white"
+            />
+            <path
+              d="M17.7188 10.2188H18.8906C19.2787 10.2188 19.5938 10.5337 19.5938 10.9219V17.25C19.5938 17.4986 19.495 17.7371 19.3192 17.9129C19.1433 18.0887 18.9049 18.1875 18.6562 18.1875C18.4076 18.1875 18.1692 18.0887 17.9933 17.9129C17.8175 17.7371 17.7188 17.4986 17.7188 17.25V10.2188Z"
+              fill="white"
+            />
+          </svg>
+        }
+        title="개인정보처리방침"
+        onClick={() => {
+          navigate('/settings/privacy', { replace: true });
+        }}
+      />
+      <Divider />
+      <SettingItem
+        icon={
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 27 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="13.5" cy="13.5" r="13.5" fill="#BFC8D6" />
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M10.6875 8.34375C10.4389 8.34375 10.2004 8.44252 10.0246 8.61834C9.84877 8.79415 9.75 9.03261 9.75 9.28125V17.7188C9.75 17.9674 9.84877 18.2058 10.0246 18.3817C10.2004 18.5575 10.4389 18.6562 10.6875 18.6562H14.4375C14.6861 18.6562 14.9246 18.5575 15.1004 18.3817C15.2762 18.2058 15.375 17.9674 15.375 17.7188V15.375C15.375 15.2507 15.4244 15.1315 15.5123 15.0435C15.6002 14.9556 15.7194 14.9062 15.8438 14.9062C15.9681 14.9062 16.0873 14.9556 16.1752 15.0435C16.2631 15.1315 16.3125 15.2507 16.3125 15.375V17.7188C16.3125 18.216 16.115 18.6929 15.7633 19.0446C15.4117 19.3962 14.9348 19.5938 14.4375 19.5938H10.6875C10.1902 19.5938 9.71331 19.3962 9.36167 19.0446C9.01004 18.6929 8.8125 18.216 8.8125 17.7188V9.28125C8.8125 8.78397 9.01004 8.30706 9.36167 7.95542C9.71331 7.60379 10.1902 7.40625 10.6875 7.40625H14.4375C14.9348 7.40625 15.4117 7.60379 15.7633 7.95542C16.115 8.30706 16.3125 8.78397 16.3125 9.28125V11.625C16.3125 11.7493 16.2631 11.8685 16.1752 11.9565C16.0873 12.0444 15.9681 12.0938 15.8438 12.0938C15.7194 12.0938 15.6002 12.0444 15.5123 11.9565C15.4244 11.8685 15.375 11.7493 15.375 11.625V9.28125C15.375 9.03261 15.2762 8.79415 15.1004 8.61834C14.9246 8.44252 14.6861 8.34375 14.4375 8.34375H10.6875ZM13.8312 11.2938C13.919 11.3816 13.9683 11.5008 13.9683 11.625C13.9683 11.7492 13.919 11.8684 13.8312 11.9562L12.7563 13.0312H19.5938C19.7181 13.0312 19.8373 13.0806 19.9252 13.1685C20.0131 13.2565 20.0625 13.3757 20.0625 13.5C20.0625 13.6243 20.0131 13.7435 19.9252 13.8315C19.8373 13.9194 19.7181 13.9688 19.5938 13.9688H12.7563L13.8312 15.0438C13.8773 15.0867 13.9142 15.1384 13.9399 15.1959C13.9655 15.2534 13.9793 15.3155 13.9804 15.3784C13.9815 15.4414 13.9699 15.5039 13.9463 15.5622C13.9228 15.6206 13.8877 15.6736 13.8431 15.7181C13.7986 15.7627 13.7456 15.7978 13.6872 15.8213C13.6289 15.8449 13.5664 15.8565 13.5034 15.8554C13.4405 15.8543 13.3784 15.8405 13.3209 15.8149C13.2634 15.7892 13.2117 15.7523 13.1688 15.7063L11.2938 13.8312C11.206 13.7434 11.1567 13.6242 11.1567 13.5C11.1567 13.3758 11.206 13.2566 11.2938 13.1688L13.1688 11.2938C13.2566 11.206 13.3758 11.1567 13.5 11.1567C13.6242 11.1567 13.7434 11.206 13.8312 11.2938Z"
+              fill="white"
+            />
+          </svg>
+        }
+        title="로그아웃"
+        onClick={() => {
+          setToken(undefined);
+          localStorage.removeItem('token');
+        }}
+        singlePage
+      />
+      <SettingItem
+        icon={
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 27 27"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="13.5" cy="13.5" r="13.5" fill="#FF1A1A" />
+            <path
+              d="M12.4844 7.40625C11.8006 7.40625 11.1449 7.67787 10.6614 8.16137C10.1779 8.64486 9.90625 9.30061 9.90625 9.98438C9.90625 10.6681 10.1779 11.3239 10.6614 11.8074C11.1449 12.2909 11.8006 12.5625 12.4844 12.5625C13.1681 12.5625 13.8239 12.2909 14.3074 11.8074C14.7909 11.3239 15.0625 10.6681 15.0625 9.98438C15.0625 9.30061 14.7909 8.64486 14.3074 8.16137C13.8239 7.67787 13.1681 7.40625 12.4844 7.40625ZM12.4844 13.5C11.8932 13.5 11.3079 13.6177 10.7626 13.8463C10.2174 14.0749 9.72313 14.4097 9.30868 14.8314C8.89422 15.253 8.56787 15.7529 8.34865 16.302C8.12944 16.851 8.02175 17.4382 8.03187 18.0294C8.0332 18.1089 8.05472 18.1867 8.09441 18.2556C8.13409 18.3245 8.19065 18.3821 8.25875 18.4231C9.53425 19.1912 10.9955 19.596 12.4844 19.5938C14.0294 19.5938 15.4756 19.1663 16.7094 18.4231C16.7776 18.3822 16.8343 18.3246 16.8741 18.2557C16.9139 18.1868 16.9355 18.1089 16.9369 18.0294L16.9375 17.9544V17.9531C16.9375 16.7721 16.4683 15.6394 15.6332 14.8043C14.7981 13.9692 13.6654 13.5 12.4844 13.5ZM16 12.0938C15.8757 12.0938 15.7565 12.1431 15.6685 12.231C15.5806 12.319 15.5312 12.4382 15.5312 12.5625C15.5312 12.6868 15.5806 12.806 15.6685 12.894C15.7565 12.9819 15.8757 13.0312 16 13.0312H19.75C19.8743 13.0312 19.9935 12.9819 20.0815 12.894C20.1694 12.806 20.2187 12.6868 20.2187 12.5625C20.2187 12.4382 20.1694 12.319 20.0815 12.231C19.9935 12.1431 19.8743 12.0938 19.75 12.0938H16Z"
+              fill="white"
+            />
+          </svg>
+        }
+        title="모다 계정 삭제하기"
+        onClick={() => {
+          api.delete(`/user/${token}`).then();
+          setToken(undefined);
+          localStorage.removeItem('token');
+        }}
+        destructive={true}
+        singlePage
+      />
     </Container>
   );
 }
@@ -201,27 +419,28 @@ const TitleArea = styled.div`
   flex-direction: column;
   justify-content: center;
   width: 100%;
+  margin-left: 10px;
 `;
 
 const TitlePrimary = styled.p<{
-  $destructive?: boolean
+  $destructive?: boolean;
 }>`
   margin: 0;
   font-size: 15px;
-  color: ${ (props) => props.$destructive ? 'var(--red)' : 'var(--black)' };
+  color: ${(props) => (props.$destructive ? 'var(--red)' : 'var(--black)')};
   font-weight: 400;
 `;
 
 const TitleSecondary = styled.p`
   margin: 0;
   color: var(--gray400);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
 `;
 
 const Icon = styled.div`
   height: 100%;
-  width: 27px;
+  width: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
