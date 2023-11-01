@@ -555,8 +555,9 @@ const Text = styled.p`
 `;
 
 const Container = styled.div`
-  overflow: scroll;
   margin: 20px;
+  overflow: hidden;
+
   & a {
     margin-right: 10px;
     font-family: 'SUIT Variable', sans-serif;
