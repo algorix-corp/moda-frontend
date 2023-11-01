@@ -25,8 +25,13 @@ export default function RegisterCard() {
       "notification": true
     }
     api.post('/user', body).then(() => {
-      setLoading(false)
-      navigate('/login/verify?phone=' + phone, { replace: true })
+      api.post('/auth/send_code', { number: phone }).then(() => {
+        setLoading(false)
+        navigate('/login/verify?phone=' + phone, { replace: true })
+      }).catch(() => {
+        setLoading(false)
+        setErrormsg('서버에서 오류가 발생했어요.')
+      })
     }).catch(() => {
       setLoading(false)
       setErrormsg('서버에서 오류가 발생했어요.')
