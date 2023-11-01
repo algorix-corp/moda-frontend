@@ -23,26 +23,28 @@ export default function Login() {
     const body = {
       number: number,
     };
-    api.post('/auth/is_user_exist', body).then((r) => {
-      if (r.data.message === 'not exist') {
-        navigate('/register/name?phone=' + number, { replace: true });
-      } else {
-        api
-          .post('/auth/send_code', body)
-          .then(() => {
-            setLoading(false);
-            navigate(`/login/verify?phone=${ number }`, { replace: true });
-          })
-          .catch(() => {
-            setLoading(false);
-            setErrormsg('서버에서 오류가 발생했어요.');
-          });
-      }
-    }).catch(() => {
-      setLoading(false);
-      setErrormsg('서버에서 오류가 발생했어요.');
-    })
-
+    api
+      .post('/auth/is_user_exist', body)
+      .then((r) => {
+        if (r.data.message === 'not exist') {
+          navigate('/register/name?phone=' + number, { replace: true });
+        } else {
+          api
+            .post('/auth/send_code', body)
+            .then(() => {
+              setLoading(false);
+              navigate(`/login/verify?phone=${number}`, { replace: true });
+            })
+            .catch(() => {
+              setLoading(false);
+              setErrormsg('서버에서 오류가 발생했어요.');
+            });
+        }
+      })
+      .catch(() => {
+        setLoading(false);
+        setErrormsg('서버에서 오류가 발생했어요.');
+      });
   };
   useEffect(() => {
     if (phone !== null) {
@@ -52,34 +54,38 @@ export default function Login() {
   return (
     <Complex
       title="모다 시작하기"
-      description={ `모다 서비스를 이용하기 위해\n전화번호를 입력해주세요.` }
+      description={`모다 서비스를 이용하기 위해\n전화번호를 입력해주세요.`}
       content={
-      <>
         <Input
           placeholder="전화번호를 입력하세요."
           type="tel"
-          value={ number }
+          value={number}
           autoCapitalize="off"
           autoComplete="off"
           autoCorrect="off"
-          onKeyDown={ (e) => {
+          onKeyDown={(e) => {
             if (!/[0-9]/.test(e.key) && e.keyCode !== 8) {
               e.preventDefault();
             }
-          } }
-          onChange={ (e) => setNumber(e.target.value) }
-          disabled={ loading }
+          }}
+          onChange={(e) => setNumber(e.target.value)}
+          disabled={loading}
         />
-        <Warning>By using this service, you consent to Algorix LLC's<br/><Link to="/tos">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>.</Warning>
-        </>
       }
-      errormessage={ errormsg }
+      warning={
+        <Warning>
+          By using this service, you consent to Algorix LLC's
+          <br />
+          <Link to="/tos">Terms of Service</Link> and{' '}
+          <Link to="/privacy">Privacy Policy</Link>.
+        </Warning>
+      }
+      errormessage={errormsg}
       leftloretext=""
       rightbtntext="계속하기"
-      leftloreclick={ () => {
-      } }
-      rightbtnclick={ handleContinue }
-      disabled={ loading }
+      leftloreclick={() => {}}
+      rightbtnclick={handleContinue}
+      disabled={loading}
     />
   );
 }
@@ -98,11 +104,12 @@ const Input = styled.input`
 `;
 
 const Warning = styled.p`
+  margin: 10px 0;
+
   color: var(--gray400);
-  margin: 5px 0;
-  font-size: 10px;
-  
+  font-size: 14px;
+
   & a {
     color: var(--gray400);
   }
-  `;
+`;

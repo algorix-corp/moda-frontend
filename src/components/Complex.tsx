@@ -10,12 +10,14 @@ export default function Complex({
   leftloreclick,
   rightbtnclick,
   disabled,
+  warning,
 }: {
   title: string;
   description: string;
   content: JSX.Element;
   leftloretext: string;
   rightbtntext: string;
+  warning?: JSX.Element;
   errormessage?: string;
   leftloreclick: () => void;
   rightbtnclick: () => void;
@@ -29,6 +31,7 @@ export default function Complex({
       {content}
 
       <ErrorText>{errormessage}</ErrorText>
+      {warning ?? undefined}
       <MenuGroup>
         <LeftLore disabled={disabled} onClick={leftloreclick}>
           <Title>{leftloretext}</Title>
@@ -81,6 +84,7 @@ const ErrorText = styled.p`
 
 const MenuGroup = styled.div`
   margin-top: 15px;
+  height: 40.5px;
   width: 100%;
 
   display: flex;
@@ -96,7 +100,6 @@ const RightBtn = styled.button`
   border: none;
   padding: 12px 22px;
   border-radius: 22px;
-  width: fit-content;
 `;
 
 const LeftLore = styled.button`
