@@ -26,21 +26,17 @@ function SettingItem({
   return (
     <SettingArea onClick={onClick}>
       <Icon>{icon}</Icon>
-      <TitleArea>
-        {smallTitle ? (
-          <>
-            <TitleSecondary>{title}</TitleSecondary>
-            <TitlePrimary $destructive={destructive}>
-              {description}
-            </TitlePrimary>
-          </>
-        ) : (
-          <>
-            <TitlePrimary $destructive={destructive}>{title}</TitlePrimary>
-            <TitleSecondary>{description}</TitleSecondary>
-          </>
-        )}
-      </TitleArea>
+      {smallTitle ? (
+        <TitleArea>
+          <TitleSecondary>{title}</TitleSecondary>
+          <TitlePrimary $destructive={destructive}>{description}</TitlePrimary>
+        </TitleArea>
+      ) : (
+        <TitleArea>
+          <TitlePrimary $destructive={destructive}>{title}</TitlePrimary>
+          <TitleSecondary>{description}</TitleSecondary>
+        </TitleArea>
+      )}
       {singlePage ? undefined : (
         <ViewMoreIcon>
           <img src={ViewMore} alt="go" />
@@ -418,6 +414,7 @@ const TitleArea = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 2px;
   width: 100%;
   margin-left: 10px;
 `;

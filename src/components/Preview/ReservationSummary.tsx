@@ -56,8 +56,11 @@ export default function ReservationSummary() {
 }
 
 const Container = styled.div`
+  position: relative;
+  top: -30px;
+
   width: 100vw;
-  height: 185px;
+  height: 200px;
   border-radius: 25px 25px 0 0;
   background: var(--white);
   box-shadow: 0px -4px 10px 0px rgba(0, 0, 0, 0.1);
@@ -65,7 +68,7 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: 30px 20px;
+  padding: 10px 20px 0 20px;
 `;
 
 const TimeArea = styled.div`
@@ -78,13 +81,15 @@ const TimeArea = styled.div`
 `;
 
 const Button = styled.button`
+  position: relative;
+  bottom: 30px;
+
   width: 100%;
   height: 50px;
   border-radius: 10px;
   background-color: var(--primary);
   color: var(--white);
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
   outline: none;
   border: none;
 `;
@@ -126,7 +131,11 @@ const TimeText = styled.p`
   color: var(--black);
   font-size: 18px;
   font-weight: 600;
-  margin: 0;
+  margin: 0 5px 0 0;
+
+  &:last-child {
+    margin: 0;
+  }
 `;
 
 const NumberText = styled.p`

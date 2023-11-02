@@ -48,3 +48,7 @@ body {
 input::-ms-clear {
   display: none;
 }
+
+p {
+  line-height: calc(100% + 6px);
+}

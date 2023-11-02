@@ -18,15 +18,20 @@ export default function DRTPlace({
 }
 
 const Container = styled.div`
+  position: relative;
+  left: 10px;
   width: 100vw;
   height: 75px;
-  padding-left: 23px;
+
   justify-content: flex-start;
   align-items: center;
   display: flex;
 `;
 
 const TimeText = styled.p`
+  position: relative;
+  left: -10px;
+
   font-size: 12px;
   font-weight: 400;
   margin: 0;
@@ -34,14 +39,24 @@ const TimeText = styled.p`
 `;
 
 const InstructionText = styled.p`
+  position: absolute;
+  left: 61px;
+
   font-size: 15px;
   font-weight: 400;
   margin: 0;
+
+  width: calc(100vw - 121px);
+
+  word-wrap: break-word; /* IE 5.5-7 */
+  white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
+  white-space: pre-wrap; /* current browsers */
 `;
 
 const Icon = styled.img`
+  position: absolute;
+  left: 37px;
+
   width: 14px;
   height: 14px;
-  margin-left: 7px;
-  margin-right: 10px;
 `;
