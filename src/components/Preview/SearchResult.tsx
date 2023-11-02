@@ -9,11 +9,15 @@ export default function SearchResult() {
       <Text>
         모다가 <span>최적</span>의 경로를 찾았어요.
       </Text>
-      <DRTPlace time="15:30" instruction="DRT 하차 후, 부산역 승차" />
+      <DRTPlace
+        time="15:30"
+        instruction="동아대학교 구덕캠퍼스에서 DRT 부산 3호차"
+      />
       <Line time="20분" solid={false} DRT={true} />
       <NormalPlace
-        time="15:40"
-        instruction="동아대학교 구덕캠퍼스에서 DRT 승차"
+        time="15:50"
+        instruction="DRT 부산 3호차 하차 후,
+        압구정로데오역 수인분당선 도착 "
       />
     </Container>
   );
