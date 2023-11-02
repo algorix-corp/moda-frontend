@@ -1,17 +1,23 @@
-import styled from "styled-components";
-import Dot from '../../assets/dot.svg'
+import styled from 'styled-components';
+import Dot from '../../assets/dot.svg';
 
-export default function Line({ time, solid, DRT }: { time: string, solid: boolean, DRT: boolean }) {
-    return (
-        <Container>
-          <TimeArea $DRT={DRT}>{ time }</TimeArea>
-          <LineArea $solid={solid} $DRT={DRT}>
-            {solid ? (<></>) : (
-              <img src={Dot} alt="dot"/>
-            )}
-          </LineArea>
-        </Container>
-    )
+export default function Line({
+  time,
+  solid,
+  DRT,
+}: {
+  time: string;
+  solid: boolean;
+  DRT: boolean;
+}) {
+  return (
+    <Container>
+      <TimeArea $DRT={DRT}>{time}</TimeArea>
+      <LineArea $solid={solid} $DRT={DRT}>
+        {solid ? <></> : <img src={Dot} alt="dot" />}
+      </LineArea>
+    </Container>
+  );
 }
 
 const Container = styled.div`
@@ -27,9 +33,10 @@ const TimeArea = styled.div<{
   $DRT: boolean;
 }>`
   border-radius: 4px;
-  background-color: ${ (props) => (props.$DRT ? "var(--primary)" : "var(--gray800)") };
+  background-color: ${(props) =>
+    props.$DRT ? 'var(--primary)' : 'var(--gray800)'};
   color: white;
-  font-size:8px;
+  font-size: 10px;
   font-weight: 600;
   padding: 2px 5px;
 `;
@@ -41,6 +48,6 @@ const LineArea = styled.div<{
   width: 2px;
   height: 100%;
   margin-left: 14px;
-  background-color: ${ (props) => (props.$DRT ? "var(--primary)" : "transparent") };
-`
-
+  background-color: ${(props) =>
+    props.$DRT ? 'var(--primary)' : 'transparent'};
+`;

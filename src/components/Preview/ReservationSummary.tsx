@@ -1,17 +1,17 @@
-import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
-import {DRTSummary} from "../../dummy.ts";
+import styled from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { DRTSummary } from '../../dummy.ts';
 
 export default function ReservationSummary() {
   const navigate = useNavigate();
   const location = useLocation();
   const onReserveClick = () => {
-    if(location.pathname === '/reservation') {
-      navigate('/', {replace: true});
+    if (location.pathname === '/reservation') {
+      navigate('/', { replace: true });
       return;
     }
-    navigate('/reservation', {replace: true});
-  }
+    navigate('/reservation', { replace: true });
+  };
   return (
     <Container>
       <TimeArea>
@@ -23,7 +23,7 @@ export default function ReservationSummary() {
           <NumberArea>
             <NumberText>{DRTSummary.hourToTravel}</NumberText>
             <TimeText>시간</TimeText>
-            <NumberText>{ DRTSummary.minuteToTravel }</NumberText>
+            <NumberText>{DRTSummary.minuteToTravel}</NumberText>
             <TimeText>분</TimeText>
           </NumberArea>
         </SingleArea>
@@ -37,13 +37,22 @@ export default function ReservationSummary() {
           </NumberArea>
         </SingleArea>
       </TimeArea>
-      <Button onClick={onReserveClick} style={location.pathname === '/reservation' ? { backgroundColor: "var(--black)"} : {}}>{
-        location.pathname === '/preview' ? 'DRT 예약하기' : (
-          location.pathname === '/reservation' ? '메인 화면으로 돌아가기' : '예약 다시 시도하기'
-        )
-      }</Button>
+      <Button
+        onClick={onReserveClick}
+        style={
+          location.pathname === '/reservation'
+            ? { backgroundColor: 'var(--black)' }
+            : {}
+        }
+      >
+        {location.pathname === '/preview'
+          ? 'DRT 예약하기'
+          : location.pathname === '/reservation'
+          ? '메인 화면으로 돌아가기'
+          : '예약 다시 시도하기'}
+      </Button>
     </Container>
-  )
+  );
 }
 
 const Container = styled.div`
@@ -109,7 +118,7 @@ const TimeSaved = styled.p`
   background-color: var(--gray800);
   color: var(--white);
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
   text-align: center;
 `;
 
@@ -132,4 +141,5 @@ const NumberArea = styled.div`
   flex-direction: row;
   align-items: baseline;
   justify-content: center;
+  margin-top: 5px;
 `;
