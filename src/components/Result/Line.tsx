@@ -11,22 +11,37 @@ export default function Line({
   DRT: boolean;
 }) {
   return (
-    <Container>
-      <TimeArea $DRT={DRT}>{time}</TimeArea>
-      <LineArea $solid={solid} $DRT={DRT}>
-        {solid ? <></> : <img src={Dot} alt="dot" />}
-      </LineArea>
-    </Container>
+    <Wrapper>
+      <Container>
+        <TimeArea $DRT={DRT}>{time}</TimeArea>
+        <div>
+          <LineArea $solid={solid} $DRT={DRT}>
+            {solid ? undefined : <DotImg src={Dot} alt="dot" />}
+          </LineArea>
+        </div>
+      </Container>
+    </Wrapper>
   );
 }
 
 const Container = styled.div`
+  position: absolute;
   width: 100vw;
   height: 63px;
+
+  top: -31.5px;
   padding-left: 20px;
   justify-content: flex-start;
   align-items: center;
   display: flex;
+
+  z-index: -1;
+`;
+
+const Wrapper = styled.div`
+  position: relative;
+  width: 0;
+  height: 0;
 `;
 
 const TimeArea = styled.div<{
@@ -46,8 +61,12 @@ const LineArea = styled.div<{
   $solid: boolean;
 }>`
   width: 2px;
-  height: 100%;
-  margin-left: 14px;
+  height: 70px;
+  margin-left: 14.5px;
   background-color: ${(props) =>
-    props.$DRT ? 'var(--primary)' : 'transparent'};
+    props.$solid ? 'var(--primary)' : 'transparent'};
+`;
+
+const DotImg = styled.img`
+  height: 63px;
 `;
