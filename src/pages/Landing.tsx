@@ -19,6 +19,7 @@ export default function Landing() {
     const [isSwiped, setIsSwiped] = useState<boolean>(false);
     const [schedules, setSchedule] = useState<Schedule[]>([]);
     const [token] = useRecoilState(tokenAtom);
+    const [reloadschedule, setReloadschedule] = useState<boolean>(false);
     const handlers = useSwipeable({
         onSwipedLeft: () => {
             setIsSwiped(true);
@@ -30,10 +31,11 @@ export default function Landing() {
     });
 
     useEffect(() => {
+        setReloadschedule(!reloadschedule)
         api.get(`/user/${ token }/reservations`).then((r) => {
             setSchedule(r.data.reservations);
         })
-    }, [token, setSchedule])
+    }, [token, setSchedule, reloadschedule])
 
 
     return (
@@ -64,7 +66,10 @@ export default function Landing() {
                                 </Place>
                             </ScheduleTextGroup>
                             <Time $swiped={lastObj === index && isSwiped}>{item.time}</Time>
-                            <DeleteButton $swiped={lastObj === index && isSwiped}>
+                            <DeleteButton $swiped={lastObj === index && isSwiped} onClick={() => {
+                                api.delete(`/drt/${ item.id }`).then()
+                                setReloadschedule(!reloadschedule)
+                            }}>
                                 <CancelIcon src={CancelSVG} />
                             </DeleteButton>
                         </Schedule>

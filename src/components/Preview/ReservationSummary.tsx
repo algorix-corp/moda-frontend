@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import {DRTSummary} from "../../dummy.ts";
+import api from "../../api.ts";
 
 export default function ReservationSummary() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ export default function ReservationSummary() {
       navigate('/', {replace: true});
       return;
     }
+    api.post(`/drt`)
     navigate('/reservation', {replace: true});
   }
   return (

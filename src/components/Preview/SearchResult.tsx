@@ -3,6 +3,7 @@ import DRTPlace from "../Result/DRTPlace.tsx";
 import NormalPlace from "../Result/NormalPlace.tsx";
 import Line from "../Result/Line.tsx";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function SearchResult() {
   return (
     <Container>

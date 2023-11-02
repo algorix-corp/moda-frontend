@@ -7,14 +7,37 @@ import Searching from "../components/Preview/Searching.tsx";
 import { useRecoilState } from "recoil";
 import { departureAtom, destinationAtom } from "../states/atom.ts";
 import { useNavigate } from "react-router-dom";
+import api from "../api.ts";
 
 export default function Preview() {
   const [searching, setSearching] = useState<boolean>(true)
-  const [departure] = useRecoilState(departureAtom)
-  const [destination] = useRecoilState(destinationAtom)
+  const [departure, setDeparture] = useRecoilState(departureAtom)
+  const [destination, setDestination] = useRecoilState(destinationAtom)
   const navigate = useNavigate()
-  //const [data, setData] = useEffect<any>(undefined)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //const [data, setData] = useState<any>(undefined)
   useEffect(() => {
+    if(departure === -1 || destination === -1) {
+      // get lat, lon from geolocation
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude
+        const lon = position.coords.longitude
+        const params_geo = new URLSearchParams()
+        params_geo.append('lat', lat.toString())
+        params_geo.append('lon', lon.toString())
+        api.get('/map/reverse_geocoding', { params: params_geo }).then((r) => {
+          if(departure === -1) {
+            setDeparture(r.data.poi)
+          }
+          if(destination === -1) {
+            setDestination(r.data.poi)
+          }
+        }).catch(() => {
+          navigate('/preview/noresult', { replace: true })
+        })
+      })
+    }
+
     const params = new URLSearchParams()
     params.append('start_poi', departure.toString())
     params.append('end_poi', destination.toString())
@@ -29,7 +52,8 @@ export default function Preview() {
     setTimeout(() => {
       setSearching(false)
     }, 500)
-  }, [navigate, destination, departure])
+
+  }, [navigate, destination, departure, setSearching, setDeparture, setDestination])
   if(searching) {
     return (
       <Container>
