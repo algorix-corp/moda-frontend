@@ -38,7 +38,7 @@ export default function ReservationSummary({data}: {data: any}) {
         </SingleArea>
         <SingleArea>
           <TimeSavedArea>
-            <SmallText>총 DRT 비용</SmallText>
+            <SmallText>총 비용</SmallText>
           </TimeSavedArea>
           <NumberArea>
             <NumberText>{data.fareWon.toLocaleString('ko-KR')}</NumberText>
