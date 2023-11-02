@@ -6,6 +6,7 @@ import CircleWarningSVG from '../assets/65-circle-warning.svg';
 import api from "../api.ts";
 import { tokenAtom } from "../states/atom.ts";
 import { useRecoilState } from "recoil";
+import { sche } from '../dummy'
 
 interface Schedule {
   id: string;
@@ -17,9 +18,8 @@ export default function Landing() {
   const [lastObjInQueue, setLastObjInQueue] = useState<null | number>(null);
   const [lastObj, setLastObj] = useState<null | number>(null);
   const [isSwiped, setIsSwiped] = useState<boolean>(false);
-  const [schedules, setSchedule] = useState<Schedule[]>([]);
+  const [schedules, setSchedule] = useState<Schedule[]>(sche);
   const [token] = useRecoilState(tokenAtom);
-  const [reloadschedule, setReloadschedule] = useState<boolean>(false);
   const [name, setName] = useState<string | undefined>(undefined);
   const handlers = useSwipeable({
     onSwipedLeft: () => {
@@ -36,13 +36,6 @@ export default function Landing() {
       setName(r.data.user.username)
     })
   }, [token])
-
-  useEffect(() => {
-    api.get(`/user/${ token }/reservations`).then((r) => {
-      setSchedule(r.data.reservations);
-    })
-  }, [token, setSchedule, reloadschedule])
-
 
   return (
     <Container>
@@ -76,8 +69,7 @@ export default function Landing() {
               </ScheduleTextGroup>
               <Time $swiped={ lastObj === index && isSwiped }>{ item.time }</Time>
               <DeleteButton $swiped={ lastObj === index && isSwiped } onClick={ () => {
-                api.delete(`/drt/${ item.id }`).then()
-                setReloadschedule(!reloadschedule)
+                setSchedule(schedules.filter((_, i) => i !== index));
               } }>
                 <CancelIcon src={ CancelSVG }/>
               </DeleteButton>

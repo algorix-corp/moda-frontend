@@ -1,10 +1,10 @@
-export const schedules: {
+export const sche: {
   id: string;
   address: string;
   time: string;
 }[] = [
   {
-    id: 'DRT 부산 111호차',
+    id: 'DRT 부산 11호차',
     address: '동아대학교 구덕캠퍼스',
     time: '15:22',
   },
@@ -13,6 +13,32 @@ export const schedules: {
     address: '수서역',
     time: '18:11',
   },
+  {
+    id: 'DRT 강남 1호차',
+    address: '수서역',
+    time: '18:01',
+  },
+  {
+    id: 'DRT 평촌 7호차',
+    address: '범계역',
+    time: '18:11',
+  },
+  {
+    id: 'DRT 부산 7호차',
+    address: '부산역',
+    time: '18:11',
+  },
+  {
+    id: 'DRT 서울 10호차',
+    address: '서울역',
+    time: '13:32',
+  },
+  {
+    id: 'DRT 인천 12호차',
+    address: '인천공항',
+    time: '18:11',
+  },
+
 ];
 
 export const saved = [0, 1];
