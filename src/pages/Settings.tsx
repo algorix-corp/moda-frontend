@@ -76,88 +76,6 @@ export default function Settings() {
         setName('오류가 발생했습니다.');
       });
   }, [token]);
-  const handleNameChange = () => {
-    const newName = prompt('이름을 입력해주세요.');
-    if (newName === '') {
-      return;
-    }
-    const body = {
-      username: newName,
-      card_number: card.replace(/-/g, ''),
-      phone_number: phone.replace(/-/g, ''),
-      notification: true,
-    };
-    api.put(`/user/${token}`, body).then(() => {
-      window.location.reload();
-    });
-  };
-  const handlePhoneChange = () => {
-    const newPhone = prompt('전화번호를 입력해주세요.');
-    if (newPhone === '') {
-      return;
-    }
-    const body_verify = {
-      number: newPhone.replace(/-/g, ''),
-    };
-    api
-      .post('/auth/is_user_exist', body_verify)
-      .then((r) => {
-        if (r.data.message === 'exist') {
-          alert('이미 존재하는 전화번호입니다.');
-          return;
-        }
-      })
-      .catch(() => {
-        alert('오류가 발생했습니다.');
-        return;
-      });
-    api
-      .post('/auth/send_code', body_verify)
-      .then()
-      .catch(() => {
-        alert('오류가 발생했습니다.');
-        return;
-      });
-    const code = prompt('인증번호를 입력해주세요.');
-    if (code === '') {
-      return;
-    }
-    api
-      .post('/auth/verify', {
-        phone: newPhone.replace(/-/g, ''),
-        code: code,
-      })
-      .then(() => {
-        const body = {
-          username: name,
-          card_number: card.replace(/-/g, ''),
-          phone_number: newPhone.replace(/-/g, ''),
-          notification: true,
-        };
-        api.put(`/user/${token}`, body).then(() => {
-          window.location.reload();
-        });
-      })
-      .catch(() => {
-        alert('인증번호가 일치하지 않거나 오류가 발생했습니다.');
-        return;
-      });
-  };
-  const handleCardChange = () => {
-    const newCard = prompt('교통카드 번호를 입력해주세요.');
-    if (newCard === '') {
-      return;
-    }
-    const body = {
-      username: name,
-      card_number: newCard.replace(/-/g, ''),
-      phone_number: phone.replace(/-/g, ''),
-      notification: true,
-    };
-    api.put(`/user/${token}`, body).then(() => {
-      window.location.reload();
-    });
-  };
   return (
     <Container>
       <div style={{ padding: '16px 0 ' }}>
@@ -184,7 +102,7 @@ export default function Settings() {
         title="이름"
         description={name}
         smallTitle={true}
-        onClick={handleNameChange}
+        onClick={() => navigate('/settings/name', { replace: true })}
       />
       <SettingItem
         icon={
@@ -219,7 +137,7 @@ export default function Settings() {
         title="전화번호"
         description={phone}
         smallTitle={true}
-        onClick={handlePhoneChange}
+        onClick={() => navigate('/settings/phone', { replace: true })}
       />
       <SettingItem
         icon={
@@ -246,7 +164,7 @@ export default function Settings() {
         title="교통카드"
         description={card}
         smallTitle={true}
-        onClick={handleCardChange}
+        onClick={() => navigate('/settings/card', { replace: true })}
       />
       <Divider />
       <SettingItem

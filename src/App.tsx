@@ -17,6 +17,10 @@ import Settings from "./pages/Settings";
 import TOS from "./pages/TOS";
 import Privacy from "./pages/Privacy";
 import NoResult from "./components/Preview/NoResult.tsx";
+import SettingName from "./pages/Settings/SettingName.tsx";
+import SettingVerify from "./pages/Settings/SettingVerify.tsx";
+import SettingNumber from "./pages/Settings/SettingNumber.tsx";
+import SettingCard from "./pages/Settings/SettingCard.tsx";
 
 const router = createBrowserRouter([
   {
@@ -129,6 +133,42 @@ const router = createBrowserRouter([
     element: <RegisterCard/>,
   },
   {
+    path: '/settings/name',
+    element: (
+      <div>
+        <SettingName/>
+        <Navigator/>
+      </div>
+    )
+  },
+  {
+    path: '/settings/phone',
+    element: (
+      <div>
+        <SettingNumber/>
+        <Navigator/>
+      </div>
+    )
+  },
+  {
+    path: '/settings/verify',
+    element: (
+      <div>
+        <SettingVerify/>
+        <Navigator/>
+      </div>
+    )
+  },
+  {
+    path: '/settings/card',
+    element: (
+      <div>
+        <SettingCard/>
+        <Navigator/>
+      </div>
+    )
+  },
+  {
     path: '*',
     element: <ErrorCatch/>,
   },
@@ -149,61 +189,6 @@ export default function App() {
           </Title>
         </LogoArea>
         <DescriptionArea>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean eget
-            tellus pharetra, aliquet metus non, sollicitudin lorem. Etiam auctor
-            leo ac orci dictum aliquet. Integer dignissim tortor massa, sed
-            fermentum dolor pellentesque sed. Phasellus leo nulla, tincidunt nec
-            quam ut, auctor molestie lorem. Donec mattis lacinia lectus vel
-            auctor. Aliquam et libero ultricies, condimentum tellus at, dictum
-            dui. In suscipit mi metus, eu condimentum tellus ultricies eget.
-            Duis sollicitudin augue et leo tincidunt vestibulum. Integer
-            tincidunt vel risus a vehicula. Morbi efficitur erat eget leo
-            volutpat, sit amet pulvinar turpis tempus. Vestibulum ante ipsum
-            primis in faucibus orci luctus et ultrices posuere cubilia curae;
-            Proin congue mauris et ultricies egestas. Phasellus cursus maximus
-            congue.
-          </p>
-          <p>
-            Quisque pretium ac dolor sit amet semper. Nullam vestibulum
-            ultricies magna a gravida. Curabitur ut risus aliquet, efficitur
-            lorem quis, pharetra elit. Suspendisse fringilla interdum tincidunt.
-            Nulla facilisi. Nam justo justo, rutrum auctor enim eu, dapibus
-            sagittis diam. Vestibulum ante ipsum primis in faucibus orci luctus
-            et ultrices posuere cubilia curae; Aenean ullamcorper sem commodo
-            massa viverra vulputate. Vivamus nec consectetur mi. Suspendisse
-            dignissim mauris eget vehicula tincidunt. Ut molestie neque quis
-            pretium suscipit. Sed aliquet porttitor imperdiet. Curabitur in
-            ultricies nisl, vitae ultricies mi. Aliquam est arcu, accumsan et
-            eros a, scelerisque malesuada dui.
-          </p>
-          <p>
-            Donec sollicitudin vestibulum nunc sit amet congue. Vivamus vel
-            felis sagittis, commodo tellus vel, suscipit odio. Fusce vitae
-            luctus orci. In elementum nisi quis placerat finibus. Mauris vitae
-            urna eget lorem tempor feugiat. Aliquam vel rutrum lacus, ut semper
-            neque. Nunc non pulvinar sem, a dignissim ex.
-          </p>
-          <p>
-            Morbi sit amet varius velit. Praesent eget lectus dolor. Sed
-            hendrerit velit et augue scelerisque vestibulum. Aliquam suscipit
-            odio non erat laoreet, non feugiat ligula ullamcorper. Suspendisse
-            id elit nisi. Praesent risus enim, suscipit sit amet metus eget,
-            lacinia congue neque. Mauris tempor ex ac facilisis tempus. Integer
-            in orci et sem sagittis volutpat. Duis ac efficitur arcu, vitae
-            dignissim quam. Vivamus consequat urna felis, vel tempor odio
-            vestibulum vel.
-          </p>
-          <p>
-            Ut rhoncus porta venenatis. Nullam semper nulla id lobortis rutrum.
-            Fusce dolor nunc, gravida vel nisl vel, dapibus blandit mauris.
-            Morbi non luctus ante. Integer ac elementum arcu. Sed in nibh
-            maximus, dignissim nisi id, porttitor arcu. Aenean et consequat
-            tortor. Morbi lorem risus, volutpat in vestibulum eget, vulputate id
-            sem. Nunc porttitor metus eu risus tempor auctor nec id dolor. In
-            libero eros, fringilla eu lacinia eu, condimentum malesuada tortor.
-            Morbi pulvinar felis ut purus posuere cursus.
-          </p>
           <p>
             모다는 모바일 전용 앱이에요. 모바일로 접속하면 바로 이용하실 수
             있어요.

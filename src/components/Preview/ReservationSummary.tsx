@@ -12,6 +12,7 @@ export default function ReservationSummary({data}: {data: any}) {
     }
     navigate('/reservation', { replace: true });
   };
+
   const getHourFromMinute = (minute: number) => {
     // no decimal
     return Math.floor(minute / 60);
