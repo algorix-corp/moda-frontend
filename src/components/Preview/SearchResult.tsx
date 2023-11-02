@@ -11,14 +11,23 @@ export default function SearchResult() {
         모다가 <span>최적</span>의 경로를 찾았어요.
       </Text>
       <DRTPlace
-        time="15:30"
-        instruction="동아대학교 구덕캠퍼스에서 DRT 부산 3호차"
+        time="15:22"
+        instruction={`동아대학교 구덕캠퍼스에서\nDRT 부산 3호차 승차`}
       />
-      <Line time="20분" solid={false} DRT={true} />
+      <Line time="10분" solid={true} DRT={true} />
       <NormalPlace
-        time="15:50"
-        instruction="DRT 부산 3호차 하차 후,
-        압구정로데오역 수인분당선 도착 "
+        time="15:32"
+        instruction={`DRT 부산 3호차 하차 후,\n부산역 승차`}
+      />
+      <Line time="2시간 31분" solid={true} DRT={false} />
+      <DRTPlace
+        time="18:11"
+        instruction={`수서역 하차 후,\nDRT 강남 7호차 승차`}
+      />
+      <Line time="9분" solid={true} DRT={true} />
+      <DRTPlace
+        time="18:20"
+        instruction={`DRT 강남 7호차 하차 후,\n압구정로데오역 수인분당선 도착`}
       />
     </Container>
   );
@@ -34,7 +43,7 @@ const Container = styled.div`
 const Text = styled.p`
   font-size: 20px;
   font-weight: 600;
-  margin: 0;
+  margin: 0 0 10px 0;
 
   & > span {
     color: var(--primary);
