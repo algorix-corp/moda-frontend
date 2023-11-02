@@ -1,4 +1,4 @@
-name: Build and Deploy to S3
+name: Build and Deploy to S3 with CloudFront Invalidation
 
 on:
   push:
@@ -32,5 +32,13 @@ jobs:
         AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: 'us-west-1' 
-        SOURCE_DIR: 'dist' 
+        AWS_REGION: 'us-west-1'  # 변경 가능한 리전 값
+        SOURCE_DIR: 'dist'     # 빌드된 파일이 있는 디렉토리
+
+    - name: Invalidate CloudFront Cache
+      run: |
+        aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-west-1'  # 동일한 리전 값으로 설정
