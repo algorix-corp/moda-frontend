@@ -15,7 +15,21 @@ export default function Preview() {
   const [destination, setDestination] = useRecoilState(destinationAtom)
   const navigate = useNavigate()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //const [data, setData] = useState<any>(undefined)
+  const [data, setData] = useState<any>(undefined)
+
+  const search = () => {
+    const params = new URLSearchParams()
+    params.append('start_poi', departure.toString())
+    params.append('end_poi', destination.toString())
+    api.get('/map/route_drt', { params }).then((r) => {
+      setData(r.data)
+      console.log(r.data)
+      setSearching(false)
+    }).catch(() => {
+      navigate('/preview/noresult', { replace: true })
+    })
+  }
+
   useEffect(() => {
     if(departure === -1 || destination === -1) {
       // get lat, lon from geolocation
@@ -36,23 +50,9 @@ export default function Preview() {
           navigate('/preview/noresult', { replace: true })
         })
       })
+    } else {
+      search()
     }
-
-    const params = new URLSearchParams()
-    params.append('start_poi', departure.toString())
-    params.append('end_poi', destination.toString())
-    /*
-    api.get('/map/route', { params }).then((r) => {
-      setData(r.data)
-      setSearching(false)
-    }).catch(() => {
-      navigate('/preview/noresult', { replace: true })
-    })
-     */
-    setTimeout(() => {
-      setSearching(false)
-    }, 500)
-
   }, [navigate, destination, departure, setSearching, setDeparture, setDestination])
   if(searching) {
     return (
@@ -63,8 +63,8 @@ export default function Preview() {
   } else {
     return (
       <Container>
-        <SearchResult/>
-        <ReservationSummary/>
+        <SearchResult data={data}/>
+        <ReservationSummary data={data}/>
       </Container>
     );
   }

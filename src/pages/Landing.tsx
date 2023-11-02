@@ -8,76 +8,85 @@ import { tokenAtom } from "../states/atom.ts";
 import { useRecoilState } from "recoil";
 
 interface Schedule {
-    id: string;
-    address: string;
-    time: string;
+  id: string;
+  address: string;
+  time: string;
 }
 
 export default function Landing() {
-    const [lastObjInQueue, setLastObjInQueue] = useState<null | number>(null);
-    const [lastObj, setLastObj] = useState<null | number>(null);
-    const [isSwiped, setIsSwiped] = useState<boolean>(false);
-    const [schedules, setSchedule] = useState<Schedule[]>([]);
-    const [token] = useRecoilState(tokenAtom);
-    const [reloadschedule, setReloadschedule] = useState<boolean>(false);
-    const handlers = useSwipeable({
-        onSwipedLeft: () => {
-            setIsSwiped(true);
-            setLastObj(lastObjInQueue);
-            setLastObjInQueue(null);
-        },
-        onSwipedRight: () => setIsSwiped(false),
-        onTap: () => setIsSwiped(false),
-    });
+  const [lastObjInQueue, setLastObjInQueue] = useState<null | number>(null);
+  const [lastObj, setLastObj] = useState<null | number>(null);
+  const [isSwiped, setIsSwiped] = useState<boolean>(false);
+  const [schedules, setSchedule] = useState<Schedule[]>([]);
+  const [token] = useRecoilState(tokenAtom);
+  const [reloadschedule, setReloadschedule] = useState<boolean>(false);
+  const [name, setName] = useState<string | undefined>(undefined);
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      setIsSwiped(true);
+      setLastObj(lastObjInQueue);
+      setLastObjInQueue(null);
+    },
+    onSwipedRight: () => setIsSwiped(false),
+    onTap: () => setIsSwiped(false),
+  });
 
-    useEffect(() => {
-        setReloadschedule(!reloadschedule)
-        api.get(`/user/${ token }/reservations`).then((r) => {
-            setSchedule(r.data.reservations);
-        })
-    }, [token, setSchedule, reloadschedule])
+  useEffect(() => {
+    api.get(`/user/${ token }`).then((r) => {
+      setName(r.data.user.username)
+    })
+  }, [token])
+
+  useEffect(() => {
+    api.get(`/user/${ token }/reservations`).then((r) => {
+      setSchedule(r.data.reservations);
+    })
+  }, [token, setSchedule, reloadschedule])
 
 
-    return (
-        <Container>
-            <TextGroup>
-                <Text>
-                    미기님의{'\n'}
-                    <span>DRT</span> 예약 일정이에요.
-                </Text>
-            </TextGroup>
-            <ScheduleGroup {...handlers}>
-                {schedules.length === 0 ? (
-                    <ExceptionGroup>
-                        <CircleWarningIcon src={CircleWarningSVG} />
-                        <WarningText>예약된 일정이 없어요.</WarningText>
-                    </ExceptionGroup>
-                ) : (
-                    schedules.map((item, index) => (
-                        <Schedule
-                            key={index}
-                            onClick={() => setLastObjInQueue(index)}
-                            onTouchStart={() => setLastObjInQueue(index)}
-                        >
-                            <ScheduleTextGroup>
-                                <Name $swiped={lastObj === index && isSwiped}>{item.id}</Name>
-                                <Place $swiped={lastObj === index && isSwiped}>
-                                    {item.address}
-                                </Place>
-                            </ScheduleTextGroup>
-                            <Time $swiped={lastObj === index && isSwiped}>{item.time}</Time>
-                            <DeleteButton $swiped={lastObj === index && isSwiped} onClick={() => {
-                                api.delete(`/drt/${ item.id }`).then()
-                                setReloadschedule(!reloadschedule)
-                            }}>
-                                <CancelIcon src={CancelSVG} />
-                            </DeleteButton>
-                        </Schedule>
-                    ))
-                )}
-            </ScheduleGroup>
-        </Container>
-    );
+  return (
+    <Container>
+      <TextGroup>
+        {
+          name ? (
+            <Text>{ name }님의{ '\n' }
+              <span>DRT</span> 예약 일정이에요.
+            </Text>
+          ) : (<></>)
+        }
+      </TextGroup>
+      <ScheduleGroup { ...handlers }>
+        { schedules.length === 0 ? (
+          <ExceptionGroup>
+            <CircleWarningIcon src={ CircleWarningSVG }/>
+            <WarningText>예약된 일정이 없어요.</WarningText>
+          </ExceptionGroup>
+        ) : (
+          schedules.map((item, index) => (
+            <Schedule
+              key={ index }
+              onClick={ () => setLastObjInQueue(index) }
+              onTouchStart={ () => setLastObjInQueue(index) }
+            >
+              <ScheduleTextGroup>
+                <Name $swiped={ lastObj === index && isSwiped }>{ item.id }</Name>
+                <Place $swiped={ lastObj === index && isSwiped }>
+                  { item.address }
+                </Place>
+              </ScheduleTextGroup>
+              <Time $swiped={ lastObj === index && isSwiped }>{ item.time }</Time>
+              <DeleteButton $swiped={ lastObj === index && isSwiped } onClick={ () => {
+                api.delete(`/drt/${ item.id }`).then()
+                setReloadschedule(!reloadschedule)
+              } }>
+                <CancelIcon src={ CancelSVG }/>
+              </DeleteButton>
+            </Schedule>
+          ))
+        ) }
+      </ScheduleGroup>
+    </Container>
+  );
 }
 
 const Container = styled.div``;
@@ -136,9 +145,9 @@ const ScheduleTextGroup = styled.div`
 `;
 
 const Name = styled.p<{
-    $swiped: boolean;
+  $swiped: boolean;
 }>`
-  transform: translateX(${(props) => (props.$swiped ? -60 : 0)}px);
+  transform: translateX(${ (props) => (props.$swiped ? -60 : 0) }px);
 
   color: var(--black);
   font-size: 17px;
@@ -151,11 +160,11 @@ const Name = styled.p<{
 `;
 
 const Place = styled.p<{
-    $swiped: boolean;
+  $swiped: boolean;
 }>`
   margin-top: 2px;
 
-  transform: translateX(${(props) => (props.$swiped ? -60 : 0)}px);
+  transform: translateX(${ (props) => (props.$swiped ? -60 : 0) }px);
 
   color: var(--gray400);
   font-size: 13px;
@@ -168,11 +177,11 @@ const Place = styled.p<{
 `;
 
 const Time = styled.p<{
-    $swiped: boolean;
+  $swiped: boolean;
 }>`
   position: relative;
   top: 50%;
-  right: ${(props) => (props.$swiped ? 60 : 0)}px;
+  right: ${ (props) => (props.$swiped ? 60 : 0) }px;
 
   float: right;
   transform: translateY(-50%);
@@ -184,7 +193,7 @@ const Time = styled.p<{
 `;
 
 const DeleteButton = styled.div<{
-    $swiped: boolean;
+  $swiped: boolean;
 }>`
   position: relative;
   width: 60px;
@@ -192,7 +201,7 @@ const DeleteButton = styled.div<{
   left: 100%;
   right: 0;
 
-  transform: translateX(${(props) => (props.$swiped ? -35 : 25)}px);
+  transform: translateX(${ (props) => (props.$swiped ? -35 : 25) }px);
 
   background-color: var(--redSub);
 

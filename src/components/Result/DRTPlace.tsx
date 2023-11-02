@@ -12,7 +12,7 @@ export default function DRTPlace({
     <Container>
       <TimeText>{time}</TimeText>
       <Icon src={DRTIcon} alt="DRT" />
-      <InstructionText>{instruction}</InstructionText>
+      <InstructionText dangerouslySetInnerHTML={{__html: instruction}}></InstructionText>
     </Container>
   );
 }
@@ -51,6 +51,14 @@ const InstructionText = styled.p`
   word-wrap: break-word; /* IE 5.5-7 */
   white-space: -moz-pre-wrap; /* Firefox 1.0-2.0 */
   white-space: pre-wrap; /* current browsers */
+  
+  word-break: keep-all;
+
+
+  & > span {
+    color: var(--primary);
+    font-weight: 600;
+  }
 `;
 
 const Icon = styled.img`

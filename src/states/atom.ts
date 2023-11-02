@@ -55,3 +55,8 @@ export const destinationNameAtom = atom<string>({
   key: 'destinationName',
   default: ''
 })
+
+export const resultdataAtom = atom<any>({
+  key: 'resultdata',
+  default: undefined
+})

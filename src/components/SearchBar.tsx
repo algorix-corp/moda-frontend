@@ -27,7 +27,7 @@ export default function SearchBar() {
   useEffect(() => {
     const changeQuery = setTimeout(() => {
       setQueries(destinationtemp === '' ? undefined : destinationtemp)
-    }, 500)
+    }, 200)
     return () => {
       clearTimeout(changeQuery)
     }
@@ -35,7 +35,7 @@ export default function SearchBar() {
   useEffect(() => {
     const changeQuery = setTimeout(() => {
       setQueries(departuretemp === '' ? undefined : departuretemp)
-    }, 500)
+    }, 200)
     return () => {
       clearTimeout(changeQuery)
     }
@@ -70,9 +70,9 @@ export default function SearchBar() {
 
   useEffect(() => {
     if (location.pathname !== '/' && selected === 0) {
+      console.log(departure)
       if (departure === undefined) {
         setDeparture(Location.CURRENT);
-
         // @ts-ignore
         document.querySelector('.departure')!.value = '내 현재 위치';
       } else {

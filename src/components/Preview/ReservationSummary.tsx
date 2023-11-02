@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { DRTSummary } from '../../dummy.ts';
 
-export default function ReservationSummary() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function ReservationSummary({data}: {data: any}) {
   const navigate = useNavigate();
   const location = useLocation();
   const onReserveClick = () => {
@@ -12,18 +12,26 @@ export default function ReservationSummary() {
     }
     navigate('/reservation', { replace: true });
   };
+  const getHourFromMinute = (minute: number) => {
+    // no decimal
+    return Math.floor(minute / 60);
+  }
+  const getMinuteFromMinute = (minute: number) => {
+    // no decimal
+    return Math.round(minute % 60);
+  }
   return (
     <Container>
       <TimeArea>
         <SingleArea>
           <TimeSavedArea>
             <SmallText>예상 소요 시간</SmallText>
-            <TimeSaved>{DRTSummary.shortenedMinutes}분 단축</TimeSaved>
+            <TimeSaved>{data.savedMinute}분 단축</TimeSaved>
           </TimeSavedArea>
           <NumberArea>
-            <NumberText>{DRTSummary.hourToTravel}</NumberText>
+            <NumberText>{getHourFromMinute(data.timeMinute)}</NumberText>
             <TimeText>시간</TimeText>
-            <NumberText>{DRTSummary.minuteToTravel}</NumberText>
+            <NumberText>{getMinuteFromMinute(data.timeMinute)}</NumberText>
             <TimeText>분</TimeText>
           </NumberArea>
         </SingleArea>
@@ -32,7 +40,7 @@ export default function ReservationSummary() {
             <SmallText>총 DRT 비용</SmallText>
           </TimeSavedArea>
           <NumberArea>
-            <NumberText>{DRTSummary.fee.toLocaleString('ko-KR')}</NumberText>
+            <NumberText>{data.fareWon.toLocaleString('ko-KR')}</NumberText>
             <TimeText>원</TimeText>
           </NumberArea>
         </SingleArea>
