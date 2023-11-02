@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export default function Searching() {
   return (
     <Container>
       <SmallText>경로를 검색하는 중이에요.</SmallText>
     </Container>
-  )
+  );
 }
 
 const Container = styled.div`
@@ -19,7 +19,7 @@ const Container = styled.div`
 
 const SmallText = styled.p`
   color: var(--gray400);
-  font-size: 12px;
+  font-size: 16px;
   text-align: center;
   font-weight: 400;
   margin: 0;

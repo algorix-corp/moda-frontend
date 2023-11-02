@@ -1,15 +1,20 @@
+import styled from 'styled-components';
+import DefaultIcon from '../../assets/defaultplace.svg';
 
-import styled from "styled-components";
-import DefaultIcon from "../../assets/defaultplace.svg";
-
-export default function NormalPlace({time, instruction}: {time: string, instruction: string}) {
+export default function NormalPlace({
+  time,
+  instruction,
+}: {
+  time: string;
+  instruction: string;
+}) {
   return (
     <Container>
       <TimeText>{time}</TimeText>
-      <Icon src={DefaultIcon} alt="DRT"/>
+      <Icon src={DefaultIcon} alt="DRT" />
       <InstructionText>{instruction}</InstructionText>
     </Container>
-  )
+  );
 }
 
 const Container = styled.div`
@@ -22,14 +27,14 @@ const Container = styled.div`
 `;
 
 const TimeText = styled.p`
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   margin: 0;
   color: var(--gray400);
 `;
 
 const InstructionText = styled.p`
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
   margin: 0;
 `;
